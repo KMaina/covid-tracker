@@ -2,3 +2,5 @@
 .venv
 .vscode/*
 .virtual/*
+.migrator.sh
+.start.sh
