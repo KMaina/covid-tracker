@@ -4,3 +4,4 @@
 virtual
 .migrator.sh
 .start.sh
+*.pyc
