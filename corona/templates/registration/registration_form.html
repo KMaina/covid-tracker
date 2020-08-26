@@ -18,14 +18,22 @@
                   <h3 class="text-center" style="color: white; padding-top: 8px;" >Sign Up</h3>
                 </div>
                 <div class="panel-body">
-                    <form  action="{% url 'signup' %}" method="post">
+                    <form method="post">
                         {% csrf_token %}
-                        {% bootstrap_form form %}
-                        <div class="form-group" style="text-align: center;">
-                          <input type="submit" class="btn btn-primary btn-md"  value="Sign Up">
-                        </div>
-                        <input type="hidden" name="next" value="{{next}}">
-                    </form>
+                          {% for field in form %}
+                          <p>
+                            {{ field.label_tag }}<br>
+                            {{ field }}
+                            {% if field.help_text %}
+                              <small style="display: none">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% for error in field.errors %}
+                              <p style="color: red">{{ error }}</p>
+                            {% endfor %}
+                          </p>
+                          {% endfor %}
+                        <button type="submit">Sign up</button>
+                      </form>
                 </div>
             </div>
         </div>    
