@@ -1,4 +1,4 @@
-#!/home/willy/Desktop/prodev/covid-tracker/virtual/bin/python3.8
+#!/home/miro/Documents/moringa/covid-tracker/virtual/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
