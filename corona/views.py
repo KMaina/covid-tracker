@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
+from .models import Profile
 
 
 # Create your views here.
@@ -62,5 +63,6 @@ def activate_account(request, uidb64, token):
 
 @login_required(login_url='/accounts/login/')
 def profile(request):
-
-    return render(request, 'index.html', {"title": title, "current_user":current_user})
+    current_user = request.user
+    profile = Profile.objects.filter(user=current_user).first()
+    return render(request, 'profile.html', locals())
