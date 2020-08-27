@@ -15,13 +15,12 @@
           <h3 class="text-center">Sign In</h3>
         </div>
         <div class="panel-body">
-          <form  action="/accounts/login/" method="post" style="width: 80%;">
+          <form  action="/login/" method="post" style="width: 80%;">
             {% csrf_token %}
             {% bootstrap_form form%}
             <div class="form-group">
               <input type="submit" class="btn btn-primary btn-sm" value="Login">
             </div>
-            <input type="hidden" name="next" value="{{next}}">
           </form>
         </div>
       </div>
