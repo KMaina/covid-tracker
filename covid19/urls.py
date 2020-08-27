@@ -21,12 +21,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'', include('corona.urls')),
-<<<<<<< HEAD
     url(r'admin/', admin.site.urls),
     url(r'^accounts/', include('registration.backends.simple.urls')),
-    url(r'^logout/$', auth_views.LogoutView.as_view(), {'next_page': '/'}, name='logout'),
-=======
-    url('admin/', admin.site.urls),
-    url(r'^accounts/', include('registration.backends.simple.urls')),
->>>>>>> c705e8f808252d5fb1fd306c42bb20c9f1b494f8
+    url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
 ]

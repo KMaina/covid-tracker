@@ -5,6 +5,7 @@ from .forms import SignupForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.contrib.auth.models import User
@@ -17,8 +18,9 @@ def home(request):
 
 def index_test(request):
     title = "Covid Index Bootstrap Test"
+    current_user = request.user
 
-    return render(request, 'index.html', {"title": title})
+    return render(request, 'index.html', {"title": title, "current_user":current_user})
 
 def signup(request):
     if request.method == 'POST':
@@ -38,12 +40,13 @@ def signup(request):
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(email_subject, message, to=[to_email])
             email.send()
-            return redirect ('index')
+            return HttpResponse('We have sent you an email, please confirm your email address to complete registration')
     else:
         form = SignupForm()
     return render( request, 'registration/registration_form.html', {'form': form} )
 
 def activate_account(request, uidb64, token):
+    title = 'CovTracker'
     try:
         uid = force_bytes(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
@@ -53,6 +56,11 @@ def activate_account(request, uidb64, token):
         user.is_active = True
         user.save()
         login(request, user)
-        return HttpResponse('Your account has been activate successfully')
+        return render(request, 'index.html', {"title": title})
     else:
         return HttpResponse('Activation link is invalid!')
+
+@login_required(login_url='/accounts/login/')
+def profile(request):
+
+    return render(request, 'index.html', {"title": title, "current_user":current_user})
