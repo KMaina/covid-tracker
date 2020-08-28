@@ -78,6 +78,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'covid19.wsgi.application'
+LOGOUT_REDIRECT_URL = '/index' i
 
 
 # Database
