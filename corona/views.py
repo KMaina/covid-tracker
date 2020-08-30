@@ -1,17 +1,19 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from .forms import SignupForm
+from .forms import SignupForm,LoginForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
-from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
+from django.contrib.auth.views import login as auth_login
+from .models import User
+from django.contrib.auth import get_user_model
 
-
+User = get_user_model()
 # Create your views here.
 def home(request):
     pass
@@ -19,8 +21,28 @@ def home(request):
 def index_test(request):
     title = "Covid Index Bootstrap Test"
     current_user = request.user
-
     return render(request, 'index.html', {"title": title, "current_user":current_user})
+
+def signIn(request):
+    msg = []
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        
+        if user is not None:
+            if user.is_active:
+                login(request, user)
+                if user.is_doctor:
+                    return redirect('doctor')
+                else:
+                    return redirect('profile')   
+            else:
+                msg.append('You account has been deactivated!')
+    else:
+        msg.append('Invalid Login credentials, try again!')
+    form = LoginForm()
+    return render(request, 'registration/login.html', {'form': form,'errors': msg})
 
 def signup(request):
     if request.method == 'POST':
@@ -63,4 +85,4 @@ def activate_account(request, uidb64, token):
 @login_required(login_url='/accounts/login/')
 def profile(request):
 
-    return render(request, 'index.html', {"title": title, "current_user":current_user})
+    return render(request, 'profile.html')
