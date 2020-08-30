@@ -19,6 +19,9 @@
                 <a href="#">Home</a>
               </li>
               <li>
+                <a href="{% url 'profile' %}">{{current_user}}</a>
+              </li>
+              <li>
                 <a href="/accounts/password/change">Change Password</a>
               </li>
               <li>
@@ -32,8 +35,7 @@
           <a class='btn btn-default' href="/accounts/login"><h3 style="color: white;">Login</h3></a>
         </li>
         {% endif %}      
-    </div>
-    <a href=""><h3 style="color: white;">{{current_user}}</h3></a>
+    </div>            
   </div>   
 </nav>
   
