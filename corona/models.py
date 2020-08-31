@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 from tinymce.models import HTMLField
 
-
 # Create your models here.
 class User(AbstractUser):
     is_doctor = models.BooleanField(default=False, blank=True)
