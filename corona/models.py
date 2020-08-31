@@ -44,7 +44,7 @@ class Doctor(models.Model):
     @property
     def photo_url(self):
         if self.prof_pic and hasattr(self.prof_pic, 'url'):
-            return self.photo.url
+            return self.prof_pic.url
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)                

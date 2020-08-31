@@ -100,10 +100,10 @@ def profile(request):
                 report = reportform.save(commit=False)
                 report.user = current_user            
                 report.save()
-            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform})
+            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report})
         else:
             reportform = ReportForm()        
-        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform})
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report})
 
 @login_required(login_url='/accounts/login/')
 def editprofile(request):

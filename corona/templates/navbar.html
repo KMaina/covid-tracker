@@ -20,13 +20,13 @@
                 </a>
                 <ul class="dropdown-menu" role="menu">
                   <li>
-                    <a href="#">Home</a>
+                    <a href="/">Home</a>
                   </li>
                   <li>
                     <a href="{% url 'profile' %}">{{current_user}}</a>
                   </li>
                   <li>
-                    <a href="/accounts/password/change">Change Password</a>
+                    <a href="{% url 'password_reset' %}">Change Password</a>
                   </li>
                   <li>
                     <a href="/logout">Logout</a>
@@ -36,7 +36,7 @@
             </ul>
             {% else %}
             <li>
-              <a class='btn btn-default' href="/accounts/login"><h3 style="color: white;">Login</h3></a>
+              <a class='btn btn-default' href="{% url 'login' %}"><h3 style="color: white;">Login</h3></a>
             </li>
             {% endif %}      
         </div>            

@@ -38,15 +38,19 @@ INSTALLED_APPS = [
     'corona',
     'bootstrap4',
     'material',
+    'material.frontend',
     'fontawesome_5',
-    'material.frontend',    
     'tinymce',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'urityMiddleware',
+    'django.contrib.staticfiles',
+]
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
