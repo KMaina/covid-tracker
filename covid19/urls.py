@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     url(r'', include('corona.urls')),
-     url('^', include('django.contrib.auth.urls')),
+    url('^', include('django.contrib.auth.urls')),
     url('admin/', admin.site.urls),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),
