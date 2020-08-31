@@ -10,7 +10,8 @@
 
     <p>Click the button to get your coordinates.</p>
     <p>{{current_user.is_doctor}}</p>
-    <button onclick="getLocation()">Try It</button>
+    <button class="btn btn-primary" onclick="getLocation()">Try It</button>
+    <a href="{% url 'patients_overview' current_user.id %}" class="btn btn-info">View Patients</a>
 
     <p id="demo"></p>
 

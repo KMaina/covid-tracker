@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib.auth.views import login as auth_login
-from .models import User
+from .models import User, Patient, Doctor
 from django.contrib.auth import get_user_model
 from .models import Treatment, Status, Report, Patient, Doctor
 from django.http import HttpResponseRedirect
@@ -131,3 +131,22 @@ def editprofile(request):
         else:            
             form = PatientForm()    
         return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
+    
+@login_required(login_url='/accounts/login/')
+def patients_overview(request, doctor_id):
+    current_user = request.user
+    title = "Covid Tracker - Patients Overview"
+    is_doctor = Doctor.objects.filter(id = current_user.id)
+
+    patients = Patient.objects.order_by('-id').all()
+
+    return render(request, 'patients_overview.html', {"title": title, "patients": patients})
+
+    '''
+    if is_doctor:
+        patients = Patient.objects.order_by('-id').all()
+
+        return render(request, 'patients_overview.html', {"title": title, "patients": patients})
+    else:
+        return redirect(home)
+    '''
