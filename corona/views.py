@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from .forms import SignupForm,LoginForm
+from .forms import SignupForm, LoginForm, ReportForm, DoctorForm, PatientForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -12,16 +12,14 @@ from django.core.mail import EmailMessage
 from django.contrib.auth.views import login as auth_login
 from .models import User
 from django.contrib.auth import get_user_model
-
+from .models import Treatment, Status, Report, Patient, Doctor
+from django.http import HttpResponseRedirect
 User = get_user_model()
+
 # Create your views here.
 def home(request):
-    pass
-
-def index_test(request):
     title = "Covid Index Bootstrap Test"
     current_user = request.user
-
     return render(request, 'index.html', {"title": title, "current_user":current_user})
 
 def signIn(request):
@@ -78,12 +76,58 @@ def activate_account(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user)
-        return render(request, 'index.html', {"title": title})
+        login(request, user)       
+        return redirect('editprofile')
     else:
         return HttpResponse('Activation link is invalid!')
 
 @login_required(login_url='/accounts/login/')
 def profile(request):
+    current_user = request.user    
 
-    return render(request, 'profile.html')
+    if current_user.is_doctor == True:
+        profile = Doctor.objects.filter(user=current_user).first()
+
+        return render(request, 'doctorprofile.html', {"profile": profile, "current_user": current_user})
+
+    else:
+        profile = Patient.objects.filter(user=current_user).first()
+        patient_report = Report.objects.filter(user=current_user).first()    
+    
+        if request.method == 'POST':
+            reportform = ReportForm(request.POST)
+            if reportform.is_valid():
+                report = reportform.save(commit=False)
+                report.user = current_user            
+                report.save()
+            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform})
+        else:
+            reportform = ReportForm()        
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform})
+
+@login_required(login_url='/accounts/login/')
+def editprofile(request):
+    current_user = request.user          
+    if current_user.is_doctor == True:
+        if request.method == 'POST':        
+            form = DoctorForm(request.POST)
+            if form.is_valid():
+                profile = form.save(commit=False)
+                profile.user = current_user            
+                profile.save()
+            return redirect('profile')
+        else:           
+            form = DoctorForm()        
+        return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
+
+    else:
+        if request.method == 'POST':        
+            form = PatientForm(request.POST)
+            if form.is_valid():
+                profile = form.save(commit=False)
+                profile.user = current_user            
+                profile.save()
+            return redirect('profile')
+        else:            
+            form = PatientForm()    
+        return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
