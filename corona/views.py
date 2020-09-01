@@ -136,17 +136,15 @@ def editprofile(request):
 def patients_overview(request, doctor_id):
     current_user = request.user
     title = "Covid Tracker - Patients Overview"
-    is_doctor = Doctor.objects.filter(id = current_user.id)
 
-    patients = Patient.objects.order_by('-id').all()
+    # patients = Patient.objects.order_by('-id').all()
 
-    return render(request, 'patients_overview.html', {"title": title, "patients": patients})
+    # return render(request, 'patients_overview.html', {"title": title, "patients": patients})
 
-    '''
-    if is_doctor:
+    
+    if current_user.is_doctor:
         patients = Patient.objects.order_by('-id').all()
 
         return render(request, 'patients_overview.html', {"title": title, "patients": patients})
     else:
         return redirect(home)
-    '''

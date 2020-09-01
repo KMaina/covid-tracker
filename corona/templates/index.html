@@ -11,7 +11,9 @@
     <p>Click the button to get your coordinates.</p>
     <p>{{current_user.is_doctor}}</p>
     <button class="btn btn-primary" onclick="getLocation()">Try It</button>
-    <a href="{% url 'patients_overview' current_user.id %}" class="btn btn-info">View Patients</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'patients_overview' current_user.id %}" class="btn btn-info">View Patients</a>
+    {% endif %}
 
     <p id="demo"></p>
 
