@@ -5,9 +5,9 @@ import requests
 def home(request):
     cov_response = requests.get('https://api.thevirustracker.com/free-api?countryTotals=ALL')
     cov_data = cov_response.json()
-    ref_data = cov_data['countryitems']
+    ref_data = cov_data['countryitems'][0]
     
-    return render(request, 'covid/home.html', {"cov_data": ref_data})
+    return render(request, 'home.html', {"cov_data": ref_data})
 
 def index_test(request):
     title = "Covid Index Bootstrap Test"

@@ -1,0 +1,15 @@
+body, html {
+    background: url('https://cdn.pixabay.com/photo/2020/02/10/04/56/virus-4835301_960_720.jpg') fixed no-repeat;
+    background-size: cover;
+}
+
+table {
+    background: #ffffff90;
+    height: 60vh !important;
+    overflow-y: scroll !important;
+}
+
+tbody {
+    height: 60vh;
+    overflow-y: scroll;
+}
