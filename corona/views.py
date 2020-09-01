@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib.auth.views import login as auth_login
-from .models import User
+from .models import User, Patient, Doctor
 from django.contrib.auth import get_user_model
 from .models import Treatment, Status, Report, Patient, Doctor
 from django.http import HttpResponseRedirect
@@ -47,16 +47,16 @@ def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
+            client = form.save(commit=False)
+            client.is_active = False
+            client.save()
             current_site = get_current_site(request)
             email_subject = 'Activate Your Account'
             message = render_to_string('acc_active_email.html', {
-                'user': user,
+                'user': client,
                 'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                'token': account_activation_token.make_token(user),
+                'uid': urlsafe_base64_encode(force_bytes(client.pk)).decode(),
+                'token': account_activation_token.make_token(client),
             })
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(email_subject, message, to=[to_email])
@@ -131,3 +131,20 @@ def editprofile(request):
         else:            
             form = PatientForm()    
         return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
+    
+@login_required(login_url='/accounts/login/')
+def patients_overview(request, doctor_id):
+    current_user = request.user
+    title = "Covid Tracker - Patients Overview"
+
+    # patients = Patient.objects.order_by('-id').all()
+
+    # return render(request, 'patients_overview.html', {"title": title, "patients": patients})
+
+    
+    if current_user.is_doctor:
+        patients = Patient.objects.order_by('-id').all()
+
+        return render(request, 'patients_overview.html', {"title": title, "patients": patients})
+    else:
+        return redirect(home)

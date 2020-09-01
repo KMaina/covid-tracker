@@ -5,8 +5,35 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg" style="background: rgba(4, 37, 68, 0.877);">
-      <div class="row">
+    {% if profile.photo_url %}
+      <nav class="navbar navbar-expand-lg loggednav" style="background: linear-gradient(to bottom, #9cedfb56, #65c6f773, #0051d483), url('{{ profile.photo_url }}');">
+    {% else %}      
+      <nav class="navbar navbar-expand-lg defaultnav">
+    {% endif %}
+      <!-- App-Logo start -->
+      <div class="container-fluid" style="height: 100px;">                                            
+        <img src="https://www.palig.com/Media/Default/Coronavirus/Virus%20Icon.png" class="heading-image">            
+        <h1 class="heading-word">Tracker<sup style="display: inline-block; font-size: 20px;">🇰🇪</sup></h1>        
+      </div>
+      <!-- App-Logo End -->      
+    </nav>
+    <style>
+      .loggednav {
+        height: 15vh;
+      }
+      .defaultnav {
+        background: linear-gradient(to right, #def7fcbe, #65c6f773, #0051d483), url('https://images.immediate.co.uk/production/volatile/sites/4/2020/07/GettyImages-1218082395-2-4627f8a.jpg?quality=90&crop=4px%2C106px%2C913px%2C393px&resize=913%2C388');
+        background-size: cover;
+        height: 15vh;
+      }      
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
+
+<!--
+  <div class="row">
         <div class="col-md-8">      
           <img src="https://www.palig.com/Media/Default/Coronavirus/Virus%20Icon.png" style="display: inline-block;  width:105px; height: 105px;">
           <h1 style="color: white; display: inline-block;">-Tracker</h1>    
@@ -41,9 +68,4 @@
             {% endif %}      
         </div>            
       </div>   
-    </nav>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  </body>
-</html>
-
+-->
