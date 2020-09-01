@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .forms import ContactForm
 from django.contrib.auth.models import User
+from .models import   Contact
 # Create your views here.
 def home(request):
     pass
@@ -20,18 +21,17 @@ def profile(request):
     contact = Contact.objects.get(pk=current_user.id)
     return render(request, 'profile.html', {'contact':contact}, locals())
 
-
 @login_required(login_url='/accounts/login/')
 def create_contact(request):
     current_user = request.user
-    if request.method == 'POST':
+    if request.method =='POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            contact= form.save(commit=False)
+            contact =form.save(commit=False)
             contact.save()
 
         return redirect('/')
     else:
         form = ContactForm()
 
-    return  render(request,"create_contact.html",{'form':form})
+    return render(request,"create_contact.html",{'form':form})
