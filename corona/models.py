@@ -59,7 +59,7 @@ class Patient(models.Model):
     @property
     def photo_url(self):
         if self.prof_pic and hasattr(self.prof_pic, 'url'):
-            return self.photo.url
+            return self.prof_pic.url
 
 #Doctor report on a patient
 class Report(models.Model):
