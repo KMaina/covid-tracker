@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from .forms import SignupForm, LoginForm, ReportForm, DoctorForm, PatientForm
+from .forms import SignupForm, LoginForm, ReportForm, DoctorForm, PatientForm, ContactForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -10,9 +10,9 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib.auth.views import login as auth_login
-from .models import User, Patient, Doctor
+from .models import User, Patient, Doctor, Contact
 from django.contrib.auth import get_user_model
-from .models import Treatment, Status, Report, Patient, Doctor
+from .models import Treatment, Status, Report, Patient, Doctor,Contact
 from django.http import HttpResponseRedirect
 User = get_user_model()
 
@@ -140,7 +140,6 @@ def patients_overview(request, doctor_id):
     # patients = Patient.objects.order_by('-id').all()
 
     # return render(request, 'patients_overview.html', {"title": title, "patients": patients})
-
     
     if current_user.is_doctor:
         patients = Patient.objects.order_by('-id').all()
@@ -148,3 +147,22 @@ def patients_overview(request, doctor_id):
         return render(request, 'patients_overview.html', {"title": title, "patients": patients})
     else:
         return redirect(home)
+   
+@login_required(login_url='/accounts/login/')
+def profile(request):
+    current_user = request.user
+    profile = Patient.objects.filter(user=current_user).first()
+    #contact = Contact.objects.get(user=current_user.id)
+
+    if request.method =='POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            contact =form.save(commit=False)
+            contact.save()
+
+        return redirect('/')
+    else:
+        form = ContactForm()
+    return render(request, 'profile.html', {'form':form})
+
+

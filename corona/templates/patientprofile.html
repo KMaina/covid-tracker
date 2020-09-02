@@ -19,9 +19,9 @@
                 <h6 style="display: inline-block;">Email: <span style="font-size: 20px;">{{profile.user.email}}</span></h6>
             </div>            
             <h6 style="display: inline-block;margin-left: 15%; padding-right:15%;">Phone no.: <span style="font-size: 20px;">{{profile.phone}}</span></h6>
-            <h6 style="display: inline-block;">Status: <span style="font-size: 20px;">{{patient_report.status}}</span></h6>            
+            <h6 style="display: inline-block;">Status: <span style="font-size: 20px;">Not-set</span></h6>            
             <h6 style="display: inline-block;margin-left: 15%; padding-right:15%;">Location: <span style="font-size: 20px;">{{profile.location}}</span></h6>
-            <h6 style="display: inline-block;">Treatment: <span style="font-size: 20px;">{{patient_report.treatment}}</span></h6>            
+            <h6 style="display: inline-block;">Treatment: <span style="font-size: 20px;">Not-set</span></h6>            
             <div class="row" style="margin-top: 30px;">
               <div class="col">
                   User location map
@@ -91,8 +91,26 @@
             </div>
             </div> 
             <div class="container" style="background: white; margin-top:15vh;">
-              <h5>Contacts:</h5>
-            </div>
+              <div class="container">
+                <div class="row">
+                    <div class="col-md-6 align-item-center">
+                        {% for cont in contact %}
+                            <div class=" mt-5 card">
+                                
+                                <div class="card-body">
+                                    <p class="card-text">{{current_user.username}} : Recent Contacts</p>
+                                    <p>Name:{{cont.name}}</p>
+                                    <p>Email: {{cont.email}}</p>
+                                    <p>Phone: {{cont.phone}}</p>
+                                    <p>Loaction:{{cont.location}}</p>
+            
+                                </div>
+                                
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>            
         </div>
         <div class="col"></div>
     </div>    
