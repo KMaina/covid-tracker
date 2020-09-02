@@ -1,0 +1,20 @@
+body {
+    background: url('https://cdn.pixabay.com/photo/2020/02/10/04/56/virus-4835301_960_720.jpg');
+    background-size: cover;
+}
+
+.container {
+    padding: 30px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.jumbotron, .jumbotron-fluid {
+    background: #1B23E435;
+    color: white;
+    border-radius: 25px;
+    box-shadow: 0px 15px 20px 10px rgba(255,255,255,1);
+}
