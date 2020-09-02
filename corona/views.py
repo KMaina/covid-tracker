@@ -19,11 +19,7 @@ def profile(request):
     current_user = request.user
     profile = Profile.objects.filter(user=current_user).first()
     contact = Contact.objects.get(pk=current_user.id)
-    return render(request, 'profile.html', {'contact':contact}, locals())
 
-@login_required(login_url='/accounts/login/')
-def create_contact(request):
-    current_user = request.user
     if request.method =='POST':
         form = ContactForm(request.POST)
         if form.is_valid():
@@ -34,4 +30,6 @@ def create_contact(request):
     else:
         form = ContactForm()
 
-    return render(request,"create_contact.html",{'form':form})
+    return render(request, 'profile.html', {'contact':contact,'form':form}, locals())
+
+
