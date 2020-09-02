@@ -1,9 +1,85 @@
+{% load bootstrap4 %}
+{% load static %}
+{% load material_form %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Post</title>
+    {{form.media}}
+    {% block styles %}
+        {% bootstrap_css%}
+        
+    {% endblock %}
+</head>
+<body>
+    <div class="container">
+        <!-- See code for the form below -->
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <form action="{url 'create_contact'}" method='post' enctype="multipart/form-data">
+                    {% csrf_token %}
+            
+                    {% form form=form %}{% endform %}
+                    <input type="submit" class="btn btn-sucess" value="Post">
+                    
+                </form>
+            
+            </div>
+        </div>
+        <!-- See the code for displaying the contacts below -->
+        <div class="row">
+            <div class="col-md-6 align-item-center">
+                {% for contact in contact %}
+                    <div class=" mt-5 card">
+                        
+                        <div class="card-body">
+                            <p class="card-text">{{current_user.username}} : Recent Contacts</p>
+                            <p>Name:{{contact.name}}</p>
+                            <p>Email: {{contact.email}}</p>
+                            <p>Phone: {{contact.phone}}</p>
+                            <p>Loaction:{{contact.location}}</p>
+    
+                        </div>
+                        
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% block scripts %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        {% bootstrap_javascript %} 
+    {% endblock %}
+
+    
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% extends 'base.html' %}
 {% load static %}
 
 {% load bootstrap4 %}
 
 {% block content %}
+
 
 
 {%  if user.is_authenticated%}
