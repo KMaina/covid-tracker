@@ -14,6 +14,8 @@ from .models import User
 from django.contrib.auth import get_user_model
 from .models import Treatment, Status, Report, Patient, Doctor
 from django.http import HttpResponseRedirect
+import requests
+from django.conf import settings
 User = get_user_model()
 
 # Create your views here.
@@ -92,8 +94,14 @@ def profile(request):
 
     else:
         profile = Patient.objects.filter(user=current_user).first()
-        patient_report = Report.objects.filter(user=current_user).first()    
-    
+        patient_report = Report.objects.filter(user=current_user).first() 
+        
+        endpoint =  'http://api.ipstack.com/check?access_key={api_key}&format=1'
+        url = endpoint.format(api_key=settings.GEO_API_KEY)
+        response = requests.get(url)
+        geodata = response.json() 
+        google_api = settings.GOOGLE_API_KEY 
+        
         if request.method == 'POST':
             reportform = ReportForm(request.POST)
             if reportform.is_valid():
@@ -103,7 +111,12 @@ def profile(request):
             return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report})
         else:
             reportform = ReportForm()        
-        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report})
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report,
+        'city': geodata['city'],
+        'country': geodata['country_name'],
+        'latitude': geodata['latitude'],
+        'longitude': geodata['longitude'],
+        'api_key': google_api})
 
 @login_required(login_url='/accounts/login/')
 def editprofile(request):
