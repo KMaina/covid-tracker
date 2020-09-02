@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% include 'material/includes/material_css.html' %}
+
 {% include 'material/includes/material_js.html' %}
 {% load static %}
 {% load bootstrap4 %}
@@ -10,35 +10,30 @@
 {% endblock %}
 
 {% block content %}
-    {{block.super}}
+{{block.super}}
+    {% include "navbar.html" %}
     <div class="container">
-        <div class="top"></div>
-        <div class="patients">
+        <ul class="panel">
             {% for patient in patients %}
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title text-center">Name: <i><u>{{patient.name}}</u></i></h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-img">
-                            {% if patient.prof_pic %}
-                                <img src="{{patient.prof_pic.url}}" alt="" class="rounded img-fluid">
-                            {% else %}
-                                <img src="https://icon-library.net/images/patient-icon/patient-icon-25.jpg" alt="" class="rounded img-fluid" width="100px" height="100px">
-                            {% endif %}
+            <li style=" display:inline-block; padding: 15px;">
+                <div class="card" style="width:450px; text-align: center;">                                        
+                    <div class="row">
+                        <div class="col">
+                            <img src="{{ patient.photo_url|default_if_none:'https://icon-library.net/images/patient-icon/patient-icon-25.jpg' }}" alt="profile picture" style=" width:150px; height: 150px; border-radius:50%; margin-left:30px;margin-left:15px;"> 
                         </div>
-                        <div class="patient-details">
-                            <p>Tel: {{patient.phone}}</p>
-                            <p>Location: {{patient.location}}</p>
+                        <div class="col">
+                            <div class="card-body">
+                                <h5 class="card-title">{{patient.name}}</h5>
+                                <p>Tel: {{patient.phone}}</p>
+                                <p>Location: {{patient.location}}</p>
+                                <a href="{% url 'visitprofile' patient.user.id %}" class="btn btn-info">View Patient</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-footer">
-                        <!--Link to profile should be added here-->
-                        <a href="" class="btn btn-info">View Patient</a>
-                    </div>
+                    </div>                                        
                 </div>
+            </li>            
             {% endfor %}
-        </div>
+        </div>  
     </div>
 {% endblock %}
 

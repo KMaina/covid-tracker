@@ -1,9 +1,4 @@
-body {
-    background: url('https://cdn.pixabay.com/photo/2020/02/10/04/56/virus-4835301_960_720.jpg');
-    background-size: cover;
-}
-
-.container {
+/*.container {
     padding: 30px;
     display: flex;
     flex-direction: row;
@@ -52,4 +47,4 @@ body {
 .patient-details {
     margin-left: 50px;
     margin-top: 10px;
-}
+}*/

@@ -33,9 +33,9 @@ def signIn(request):
             if user.is_active:
                 login(request, user)
                 if user.is_doctor:
-                    return redirect('doctor')
+                    return redirect('home')
                 else:
-                    return redirect('profile')   
+                    return redirect('home')   
             else:
                 msg.append('You account has been deactivated!')
     else:
@@ -87,23 +87,49 @@ def profile(request):
 
     if current_user.is_doctor == True:
         profile = Doctor.objects.filter(user=current_user).first()
+        doctor = Doctor.objects.filter(user=current_user).first()
+        patient_report = Report.objects.filter(doctor=doctor).all()    
 
-        return render(request, 'doctorprofile.html', {"profile": profile, "current_user": current_user})
+        return render(request, 'doctorprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report})
 
     else:
         profile = Patient.objects.filter(user=current_user).first()
         patient_report = Report.objects.filter(user=current_user).first()    
-    
+        contacts = Contact.objects.filter(user=current_user).all()
+        reportform = ReportForm()   
+        if request.method =='POST':
+            form = ContactForm(request.POST)
+            if form.is_valid():
+                contact= form.save(commit=False)
+                contact.user = current_user
+                contact.save()        
+            return redirect('profile')
+        else:
+            form = ContactForm()       
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report,"form":form, "contacts":contacts})
+
+@login_required(login_url='/accounts/login/')
+def visitprofile(request,id):
+    current_user = request.user      
+    if current_user.is_doctor == True:
+        profile = Patient.objects.filter(user=id).first()
+        doctor = Doctor.objects.filter(user=current_user).first()
+        patient_report = Report.objects.filter(user=id).first()    
+        form = ContactForm()    
+
         if request.method == 'POST':
             reportform = ReportForm(request.POST)
             if reportform.is_valid():
                 report = reportform.save(commit=False)
-                report.user = current_user            
+                report.user = profile.user
+                report.doctor = doctor
                 report.save()
-            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report})
+            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report,"form":form})
         else:
-            reportform = ReportForm()        
-        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report})
+            reportform = ReportForm()
+            
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report,"form":form})
+
 
 @login_required(login_url='/accounts/login/')
 def editprofile(request):
@@ -133,36 +159,31 @@ def editprofile(request):
         return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
     
 @login_required(login_url='/accounts/login/')
-def patients_overview(request, doctor_id):
+def patients_overview(request):
     current_user = request.user
     title = "Covid Tracker - Patients Overview"
-
-    # patients = Patient.objects.order_by('-id').all()
-
-    # return render(request, 'patients_overview.html', {"title": title, "patients": patients})
-    
     if current_user.is_doctor:
-        patients = Patient.objects.order_by('-id').all()
+        patients = Patient.objects.all()
 
         return render(request, 'patients_overview.html', {"title": title, "patients": patients})
     else:
         return redirect(home)
    
-@login_required(login_url='/accounts/login/')
-def profile(request):
-    current_user = request.user
-    profile = Patient.objects.filter(user=current_user).first()
-    #contact = Contact.objects.get(user=current_user.id)
-
-    if request.method =='POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            contact =form.save(commit=False)
-            contact.save()
-
-        return redirect('/')
-    else:
-        form = ContactForm()
-    return render(request, 'profile.html', {'form':form})
+#@login_required(login_url='/accounts/login/')
+#def profile(request):
+#    current_user = request.user
+#    profile = Patient.objects.filter(user=current_user).first()
+#    #contact = Contact.objects.get(user=current_user.id)
+#
+#    if request.method =='POST':
+#        form = ContactForm(request.POST)
+#        if form.is_valid():
+#            contact =form.save(commit=False)
+#            contact.save()
+#
+#        return redirect('/')
+#    else:
+#        form = ContactForm()
+#    return render(request, 'profile.html', {'form':form})
 
 

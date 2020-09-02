@@ -25,7 +25,7 @@ class LoginForm(AuthenticationForm):
 class ReportForm(forms.ModelForm):
     class Meta:
         model = Report
-        exclude = ["user"]
+        exclude = ["user","doctor"]
 
 class PatientForm(forms.ModelForm):
     class Meta:
@@ -40,17 +40,5 @@ class DoctorForm(forms.ModelForm):
 class ContactForm(forms.ModelForm):
     class Meta:
         model= Contact 
-        fields  = ['name','email','phone','location']
-
-    layout = Layout(Row('name','email','phone','location'))
-
-#class SignupForm(UserCreationForm):
-#    email = forms.EmailField(max_length=200, help_text='Required')    
-#        
-#    def __init__(self, *args, **kwargs):
-#        super(SignupForm, self).__init__(*args, **kwargs)
-#
-#        for fieldname in ['username', 'password1', 'password2']:
-#            self.fields[fieldname].help_text = None
-
-
+        exclude  = ["user"]
+    
