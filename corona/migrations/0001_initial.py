@@ -21,6 +21,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='Contact',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=25)),
+                ('email', models.CharField(max_length=25)),
+                ('phone', models.CharField(max_length=25)),
+                ('location', models.CharField(max_length=25)),
+            ],
+          
             name='User',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),

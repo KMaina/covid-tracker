@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from .forms import SignupForm, LoginForm, ReportForm, DoctorForm, PatientForm
+from .forms import SignupForm, LoginForm, ReportForm, DoctorForm, PatientForm, ContactForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -12,8 +12,9 @@ from django.core.mail import EmailMessage
 from django.contrib.auth.views import login as auth_login
 from .models import User
 from django.contrib.auth import get_user_model
-from .models import Treatment, Status, Report, Patient, Doctor
+from .models import Treatment, Status, Report, Patient, Doctor, Contact
 from django.http import HttpResponseRedirect
+
 User = get_user_model()
 
 # Create your views here.
@@ -120,14 +121,21 @@ def editprofile(request):
             form = DoctorForm()        
         return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
 
+@login_required(login_url='/accounts/login/')
+def profile(request):
+    current_user = request.user
+    profile = Profile.objects.filter(user=current_user).first()
+    contact = Contact.objects.get(pk=current_user.id)
+
+    if request.method =='POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            contact =form.save(commit=False)
+            contact.save()
+
+        return redirect('/')
     else:
-        if request.method == 'POST':        
-            form = PatientForm(request.POST)
-            if form.is_valid():
-                profile = form.save(commit=False)
-                profile.user = current_user            
-                profile.save()
-            return redirect('profile')
-        else:            
-            form = PatientForm()    
-        return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
+        form = ContactForm()
+
+    return render(request, 'profile.html', {'contact':contact,'form':form}, locals())
+
