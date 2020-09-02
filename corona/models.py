@@ -32,7 +32,7 @@ class Status(models.Model):
         return status.id
 
 class Doctor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)                
+    user = models.ForeignKey(User, on_delete=models.CASCADE)                
     name = models.CharField(max_length=100)
     hospital = models.CharField(max_length=100)
     phone = models.CharField(max_length=10) 
@@ -47,7 +47,7 @@ class Doctor(models.Model):
             return self.prof_pic.url
 
 class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)                
+    user = models.ForeignKey(User, on_delete=models.CASCADE)                
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=10) 
     location = models.CharField(max_length=10) 
@@ -63,7 +63,7 @@ class Patient(models.Model):
 
 #Doctor report on a patient
 class Report(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)                
+    user = models.ForeignKey(User, on_delete=models.CASCADE)                
     comments = HTMLField(blank= True)
     temp = models.IntegerField()
     kit = models.CharField(max_length=100)
@@ -80,7 +80,7 @@ class Report(models.Model):
         return report
 
 class Contact(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)                
+    user = models.ForeignKey(User, on_delete=models.CASCADE)                
     name = models.CharField(max_length=25)
     email = models.CharField(max_length=25)
     phone = models.CharField(max_length=25)
