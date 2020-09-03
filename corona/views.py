@@ -120,7 +120,11 @@ def profile(request):
                 contact= form.save(commit=False)
                 contact.user = current_user
                 contact.save()        
-            return redirect('profile')
+            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,"form":form,"contacts":contacts,'city': geodata['city'],
+            'country': geodata['country_name'],
+            'latitude': geodata['latitude'],
+            'longitude': geodata['longitude'],
+            'api_key': google_api})
         else:
             form = ContactForm()       
         return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,"form":form,"contacts":contacts,'city': geodata['city'],
