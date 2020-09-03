@@ -86,16 +86,16 @@ def profile(request):
     current_user = request.user    
 
     if current_user.is_doctor == True:
-        profile = Doctor.objects.filter(user=current_user).first()
+        profile = Doctor.get_doc_profile(current_user)
 
         return render(request, 'doctorprofile.html', {"profile": profile, "current_user": current_user})
 
     else:
-        profile = Patient.objects.filter(user=current_user).first()
+        profile = Patient.get_pat_profile(current_user)
         patient_report = Report.objects.filter(user=current_user).first()    
     
         if request.method == 'POST':
-            reportform = ReportForm(request.POST)
+            reportform = Reportform(request.POST,request.FILES)
             if reportform.is_valid():
                 report = reportform.save(commit=False)
                 report.user = current_user            
@@ -110,11 +110,11 @@ def editprofile(request):
     current_user = request.user          
     if current_user.is_doctor == True:
         if request.method == 'POST':        
-            form = DoctorForm(request.POST)
+            form = DoctorForm(request.POST,request.FILES)
             if form.is_valid():
-                profile = form.save(commit=False)
-                profile.user = current_user            
-                profile.save()
+                add = form.save(commit=False)
+                add.user = current_user            
+                add.save()
             return redirect('profile')
         else:           
             form = DoctorForm()        
@@ -122,11 +122,11 @@ def editprofile(request):
 
     else:
         if request.method == 'POST':        
-            form = PatientForm(request.POST)
+            form = PatientForm(request.POST,request.FILES)
             if form.is_valid():
-                profile = form.save(commit=False)
-                profile.user = current_user            
-                profile.save()
+                add = form.save(commit=False)
+                add.user = current_user            
+                add.save()
             return redirect('profile')
         else:            
             form = PatientForm()    

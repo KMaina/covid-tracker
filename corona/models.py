@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 from tinymce.models import HTMLField
+from django.utils import timezone
 
 # Create your models here.
 class User(AbstractUser):
@@ -36,7 +37,8 @@ class Doctor(models.Model):
     name = models.CharField(max_length=100)
     hospital = models.CharField(max_length=100)
     phone = models.CharField(max_length=10) 
-    prof_pic = models.ImageField(upload_to = 'doctor/', blank=True)  
+    prof_pic = models.ImageField(upload_to = 'doctor/', blank=True) 
+    post_date = models.DateTimeField(default=timezone.now)  
 
     def __str__(self):
         return self.name
@@ -46,12 +48,22 @@ class Doctor(models.Model):
         if self.prof_pic and hasattr(self.prof_pic, 'url'):
             return self.prof_pic.url
 
+    def save_doctor(self):
+        self.save()
+
+    @classmethod
+    def get_doc_profile(cls, id):
+        profiles = Doctor.objects.filter(user=id)
+        profile = profiles.order_by("-post_date").first()
+        return profile
+
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)                
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=10) 
     location = models.CharField(max_length=10) 
-    prof_pic = models.ImageField(upload_to = 'patient/', blank=True)  
+    prof_pic = models.ImageField(upload_to = 'patient/', blank=True, null=True) 
+    post_date = models.DateTimeField(default=timezone.now) 
 
     def __str__(self):
         return self.name
@@ -59,7 +71,13 @@ class Patient(models.Model):
     @property
     def photo_url(self):
         if self.prof_pic and hasattr(self.prof_pic, 'url'):
-            return self.photo.url
+            return self.prof_pic.url
+    
+    @classmethod
+    def get_pat_profile(cls, id):
+        profiles = Patient.objects.filter(user=id)
+        profile = profiles.order_by("-post_date").first()
+        return profile
 
 #Doctor report on a patient
 class Report(models.Model):
@@ -69,14 +87,16 @@ class Report(models.Model):
     kit = models.CharField(max_length=100)
     status = models.ForeignKey(Status,on_delete=models.CASCADE, blank=True)    
     treatment = models.ForeignKey(Treatment,on_delete=models.CASCADE, blank=True)    
-    doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE, blank=True)        
+    doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE, blank=True) 
+    post_date = models.DateTimeField(default=timezone.now)        
 
     def __str__(self):
         return self.user
 
     @classmethod
     def get_report(cls,id):
-        report = Report.objects.filter(user=id).first()
+        reports = Report.objects.filter(user=id)
+        report = reports.order_by("-post_date").first()
         return report
 
 

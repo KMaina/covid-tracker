@@ -21,9 +21,9 @@ class ReportForm(forms.ModelForm):
 class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
-        exclude = ["user"]
+        exclude = ["user","post_date"]
 
 class DoctorForm(forms.ModelForm):
     class Meta:
         model = Doctor
-        exclude = ["user"]
+        exclude = ["user","post_date"]
