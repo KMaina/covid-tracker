@@ -168,6 +168,10 @@ def editprofile(request):
             form = DoctorForm()        
         return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> abc143f7d96fbfefa57c991fc2c8c253d39d7aac
     
 @login_required(login_url='/accounts/login/')
 def patients_overview(request):
@@ -179,3 +183,8 @@ def patients_overview(request):
         return render(request, 'patients_overview.html', {"title": title, "patients": patients})
     else:
         return redirect(home)
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 715afe9c1c6010ced2d81959463623be55e0608a
+>>>>>>> abc143f7d96fbfefa57c991fc2c8c253d39d7aac
