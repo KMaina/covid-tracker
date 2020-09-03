@@ -112,20 +112,18 @@ def profile(request):
         url = endpoint.format(api_key=settings.GEO_API_KEY)
         response = requests.get(url)
         geodata = response.json() 
-        google_api = settings.GOOGLE_API_KEY 
-        contactform = ContactForm()                   
+        google_api = settings.GOOGLE_API_KEY         
 
         if request.method =='POST':
-            contactform = ContactForm(request.POST)
+            form = ContactForm(request.POST)
             if contactform.is_valid():
-                contact= contactform.save(commit=False)
+                contact= form.save(commit=False)
                 contact.user = current_user
                 contact.save()        
             return redirect('profile')
         else:
-            contactform = ContactForm()       
-        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,"contactform":contactform,
-        'city': geodata['city'],
+            form = ContactForm()       
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,"form":form,'city': geodata['city'],
         'country': geodata['country_name'],
         'latitude': geodata['latitude'],
         'longitude': geodata['longitude'],
@@ -167,15 +165,6 @@ def editprofile(request):
         else:           
             form = DoctorForm()        
         return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
-
-<<<<<<< HEAD
-
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> abc143f7d96fbfefa57c991fc2c8c253d39d7aac
->>>>>>> 01f50ceb91c3b9d27b32e23ee913268f3c597223
     
 @login_required(login_url='/accounts/login/')
 def patients_overview(request):
@@ -187,12 +176,6 @@ def patients_overview(request):
         return render(request, 'patients_overview.html', {"title": title, "patients": patients})
     else:
         return redirect(home)
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 715afe9c1c6010ced2d81959463623be55e0608a
->>>>>>> abc143f7d96fbfefa57c991fc2c8c253d39d7aac
->>>>>>> 01f50ceb91c3b9d27b32e23ee913268f3c597223
+
+
