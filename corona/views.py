@@ -133,6 +133,7 @@ def editprofile(request):
             form = DoctorForm()        
         return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
 
+<<<<<<< HEAD
     
 @login_required(login_url='/accounts/login/')
 def patients_overview(request, doctor_id):
@@ -150,3 +151,5 @@ def patients_overview(request, doctor_id):
         return render(request, 'patients_overview.html', {"title": title, "patients": patients})
     else:
         return redirect(home)
+=======
+>>>>>>> 715afe9c1c6010ced2d81959463623be55e0608a
