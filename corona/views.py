@@ -108,23 +108,23 @@ def profile(request):
         profile = Patient.get_pat_profile(current_user)
         patient_report = Report.get_report(current_user) 
         contacts = Contact.objects.filter(user=current_user).all()
-
         endpoint =  'http://api.ipstack.com/check?access_key={api_key}&format=1'
         url = endpoint.format(api_key=settings.GEO_API_KEY)
         response = requests.get(url)
         geodata = response.json() 
         google_api = settings.GOOGLE_API_KEY 
-            
-        #if request.method =='POST':
-        #    form = ContactForm(request.POST)
-        #    if form.is_valid():
-        #        contact= form.save(commit=False)
-        #        contact.user = current_user
-        #        contact.save()        
-        #    return redirect('profile')
-        #else:
-        #    form = ContactForm()       
-        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,
+        contactform = ContactForm()                   
+
+        if request.method =='POST':
+            contactform = ContactForm(request.POST)
+            if contactform.is_valid():
+                contact= contactform.save(commit=False)
+                contact.user = current_user
+                contact.save()        
+            return redirect('profile')
+        else:
+            contactform = ContactForm()       
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,"contactform":contactform,
         'city': geodata['city'],
         'country': geodata['country_name'],
         'latitude': geodata['latitude'],
@@ -138,7 +138,7 @@ def visitprofile(request,id):
         profile = Patient.objects.filter(user=id).first()
         doctor = Doctor.objects.filter(user=current_user).first()
         patient_report = Report.get_report(id)
-
+        
         if request.method == 'POST':
             reportform = ReportForm(request.POST)
             if reportform.is_valid():
@@ -168,6 +168,7 @@ def editprofile(request):
             form = DoctorForm()        
         return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
 
+
     
 @login_required(login_url='/accounts/login/')
 def patients_overview(request):
@@ -179,3 +180,4 @@ def patients_overview(request):
         return render(request, 'patients_overview.html', {"title": title, "patients": patients})
     else:
         return redirect(home)
+

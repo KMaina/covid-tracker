@@ -8,21 +8,6 @@ from django.utils import timezone
 class User(AbstractUser):
     is_doctor = models.BooleanField(default=False, blank=True)
     
-class Contact(models.Model):
-    name = models.CharField(max_length=25)
-    email = models.CharField(max_length=25)
-    phone = models.CharField(max_length=25)
-    location = models.CharField(max_length=25)
-
-    def _str_(self):
-        return self.name
-
-    def save_contact(self):
-        self.save()
-
-    def delete_contact(self):
-        self.delete()        
-
 #Patient treatment option
 class Treatment(models.Model):
     treatment = models.CharField(max_length=100)
