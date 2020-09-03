@@ -1,6 +1,7 @@
 from django import forms
+from material import Layout, Row
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
-from .models import User, Report, Patient, Doctor
+from .models import User, Report, Patient, Doctor, Contact
 
 class SignupForm(UserCreationForm):
     email = forms.EmailField(max_length=200, help_text='Required')
@@ -27,3 +28,12 @@ class DoctorForm(forms.ModelForm):
     class Meta:
         model = Doctor
         exclude = ["user"]
+        
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model= Contact 
+        fields  = ['name','email','phone','location']
+
+    layout = Layout(Row('name','email','phone','location'))
+
+

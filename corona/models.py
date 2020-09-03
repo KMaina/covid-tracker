@@ -4,6 +4,21 @@ from django.contrib.auth.models import User
 from tinymce.models import HTMLField
 
 # Create your models here.
+class Contact(models.Model):
+    name = models.CharField(max_length=25)
+    email = models.CharField(max_length=25)
+    phone = models.CharField(max_length=25)
+    location = models.CharField(max_length=25)
+
+    def _str_(self):
+        return self.name
+
+    def save_contact(self):
+        self.save()
+
+    def delete_contact(self):
+        self.delete()
+        
 class User(AbstractUser):
     is_doctor = models.BooleanField(default=False, blank=True)
     
@@ -78,6 +93,4 @@ class Report(models.Model):
     def get_report(cls,id):
         report = Report.objects.filter(user=id).first()
         return report
-
-
 

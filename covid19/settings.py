@@ -80,7 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'covid19.wsgi.application'
-
+LOGOUT_REDIRECT_URL = '/index'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
