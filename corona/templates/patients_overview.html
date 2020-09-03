@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% include 'material/includes/material_css.html' %}
+{% include 'material/includes/material_js.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/p_overview.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+{% endblock %}
+
+{% block content %}
+    {{block.super}}
+    <div class="container">
+        <div class="top"></div>
+        <div class="patients">
+            {% for patient in patients %}
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title text-center">Name: <i><u>{{patient.name}}</u></i></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-img">
+                            {% if patient.prof_pic %}
+                                <img src="{{patient.prof_pic.url}}" alt="" class="rounded img-fluid">
+                            {% else %}
+                                <img src="https://icon-library.net/images/patient-icon/patient-icon-25.jpg" alt="" class="rounded img-fluid" width="100px" height="100px">
+                            {% endif %}
+                        </div>
+                        <div class="patient-details">
+                            <p>Tel: {{patient.phone}}</p>
+                            <p>Location: {{patient.location}}</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <!--Link to profile should be added here-->
+                        <a href="" class="btn btn-info">View Patient</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock%}

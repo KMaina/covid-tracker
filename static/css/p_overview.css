@@ -1,0 +1,50 @@
+.container {
+    padding: 30px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    width: 300px;
+    max-width: 300px;
+    min-width: 300px;
+
+    height: 300px;
+    max-height: 300px;
+    min-height: 300px;
+
+    background: #00000050 !important;
+    color: blanchedalmond;
+    box-shadow: 0px 5px 10px 5px rgba(255,255,255,1);
+}
+
+.card:hover {
+    transform: scale(1.1);
+}
+
+.card-img {
+    max-width: 100px;
+    max-height: 100px;
+}
+.card-body {
+    display: flex;
+    flex-direction: row;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: right;
+}
+
+.card-footer a {
+    background: #02fba8;
+    color: black;
+    font-weight: bold;
+}
+
+.patient-details {
+    margin-left: 50px;
+    margin-top: 10px;
+}
