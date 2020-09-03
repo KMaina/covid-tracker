@@ -116,14 +116,14 @@ def profile(request):
 
         if request.method =='POST':
             form = ContactForm(request.POST)
-            if contactform.is_valid():
+            if form.is_valid():
                 contact= form.save(commit=False)
                 contact.user = current_user
                 contact.save()        
             return redirect('profile')
         else:
             form = ContactForm()       
-        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,"form":form,'city': geodata['city'],
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,"form":form,"contacts":contacts,'city': geodata['city'],
         'country': geodata['country_name'],
         'latitude': geodata['latitude'],
         'longitude': geodata['longitude'],
@@ -166,6 +166,19 @@ def editprofile(request):
             form = DoctorForm()        
         return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
     
+    else:
+        if request.method == 'POST':        
+            form = PatientForm(request.POST,request.FILES)
+            if form.is_valid():
+                update = form.save(commit=False)
+                update.user = current_user            
+                update.save()
+            return redirect('profile')
+        else:           
+            form = PatientForm()        
+        return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
+
+
 @login_required(login_url='/accounts/login/')
 def patients_overview(request):
     current_user = request.user

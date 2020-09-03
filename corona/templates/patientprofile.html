@@ -25,7 +25,7 @@
                 {% if current_user.is_doctor %}
                   <!-- If you're a doctor you get nothing-->
                 {% else %}
-                  <a href="#"><button style="display: inline-block;" class="btn btn-primary">Update Profile</button></a>                  
+                  <a href="{% url 'editprofile' %}"><button style="display: inline-block;" class="btn btn-primary">Update Profile</button></a>                  
                 {% endif %}
             </div>
             
