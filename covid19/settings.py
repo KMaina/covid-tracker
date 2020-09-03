@@ -80,7 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'covid19.wsgi.application'
-
+LOGOUT_REDIRECT_URL = '/index'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -154,3 +154,6 @@ AUTH_USER_MODEL = 'corona.User'
 
 from django.urls import reverse_lazy
 LOGIN_URL = reverse_lazy('login')
+
+GEO_API_KEY = config('GEO_API_KEY', default='')
+GOOGLE_API_KEY = config('GOOGLE_API_KEY', default='')
