@@ -5,38 +5,41 @@
 {% block content %}
 {{block.super}}
     {% include "navbar.html" %}
-
-    <p>I don't know why the nav bar appears twice</p>
-
-    <p>Click the button to get your coordinates.</p>
-    <p>{{current_user.is_doctor}}</p>
-    <button class="btn btn-primary" onclick="getLocation()">Try It</button>
-    {% if user.is_authenticated %}
-      <a href="{% url 'patients_overview' current_user.id %}" class="btn btn-info">View Patients</a>
-    {% endif %}
-
-    <p id="demo"></p>
-
-    <script>
-        var x = document.getElementById("demo");
-
-        function getLocation() {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-          }
-           else { 
-            x.innerHTML = "Geolocation is not supported by this browser.";
-          }
+    <div class="row">
+        <div class="col-md-7">
+            <div class="row">
+                <div class="col">
+                    <div class="container" style="margin-left: 20px;">
+                        <img src="https://www.ilo.org/wcmsp5/groups/public/---asia/---ro-bangkok/---ilo-hanoi/documents/image/wcms_738275.png" style="height:80vh;">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="container" style="margin-left: 20px;">
+                        <img src="https://pbs.twimg.com/media/ETgUftxXsAAyj0D.jpg" style="height:30vh; width: 100%;">
+                    </div>
+                </div>
+            </div>            
+        </div>
+        <div class="col">
+            <div class="card stats">
+                <a href="{% url 'stats' %}">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: white;">Covid19 Global Stats</h3>          
+                        <p class="card-text" style="margin-top: 90px">Get real time and credible Coronavirus cases tally right here.</p>          
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        .stats {
+            width: 25rem; 
+            height: 30vh;
+            background: linear-gradient(to right, #d3f8ffb2, #65c6f794),url('https://img.etimg.com/thumb/width-1200,height-900,imgsize-116065,resizemode-1,msid-76776274/news/international/world-news/almost-third-of-covid-19-samples-show-mutation-but-not-more-severe-disease-who.jpg');
+            background-size: cover;    
+            background-position: center center;
         }
-
-        function showPosition(position) {
-          var latlon = position.coords.latitude + "," + position.coords.longitude;
-
-          var img_url = "https://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false&key=YOUR_KEY";
-
-          document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
-        }
-
-    </script>
-
+        
+    </style>
 {% endblock %}

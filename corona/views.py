@@ -10,7 +10,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib.auth.views import login as auth_login
-from .models import User, Patient, Doctor
+from .models import User, Patient, Doctor, Contact
 from django.contrib.auth import get_user_model
 from .models import Treatment, Status, Report, Patient, Doctor, Contact
 from django.http import HttpResponseRedirect
@@ -36,9 +36,9 @@ def signIn(request):
             if user.is_active:
                 login(request, user)
                 if user.is_doctor:
-                    return redirect('doctor')
+                    return redirect('home')
                 else:
-                    return redirect('profile')   
+                    return redirect('home')   
             else:
                 msg.append('You account has been deactivated!')
     else:
@@ -50,16 +50,16 @@ def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
+            client = form.save(commit=False)
+            client.is_active = False
+            client.save()
             current_site = get_current_site(request)
             email_subject = 'Activate Your Account'
             message = render_to_string('acc_active_email.html', {
-                'user': user,
+                'user': client,
                 'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                'token': account_activation_token.make_token(user),
+                'uid': urlsafe_base64_encode(force_bytes(client.pk)).decode(),
+                'token': account_activation_token.make_token(client),
             })
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(email_subject, message, to=[to_email])
@@ -90,33 +90,59 @@ def profile(request):
 
     if current_user.is_doctor == True:
         profile = Doctor.get_doc_profile(current_user)
+        doctor = Doctor.objects.filter(user=current_user).first()
+        patient_report = Report.objects.filter(doctor=doctor).all()    
 
-        return render(request, 'doctorprofile.html', {"profile": profile, "current_user": current_user})
+        return render(request, 'doctorprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report})
 
     else:
         profile = Patient.get_pat_profile(current_user)
-        patient_report = Report.objects.filter(user=current_user).first() 
-        
+        patient_report = Report.get_report(current_user) 
+        contacts = Contact.objects.filter(user=current_user).all()
+
         endpoint =  'http://api.ipstack.com/check?access_key={api_key}&format=1'
         url = endpoint.format(api_key=settings.GEO_API_KEY)
         response = requests.get(url)
         geodata = response.json() 
         google_api = settings.GOOGLE_API_KEY 
-        
-        if request.method =='POST':
-            form = ContactForm(request.POST)
-            if form.is_valid():
-                contact =form.save(commit=False)
-                contact.save()
-            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,'form':form})
-        else:
-            form = ContactForm()
-        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,'form':form,
+            
+        #if request.method =='POST':
+        #    form = ContactForm(request.POST)
+        #    if form.is_valid():
+        #        contact= form.save(commit=False)
+        #        contact.user = current_user
+        #        contact.save()        
+        #    return redirect('profile')
+        #else:
+        #    form = ContactForm()       
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,
         'city': geodata['city'],
         'country': geodata['country_name'],
         'latitude': geodata['latitude'],
         'longitude': geodata['longitude'],
         'api_key': google_api})
+
+@login_required(login_url='/accounts/login/')
+def visitprofile(request,id):
+    current_user = request.user      
+    if current_user.is_doctor == True:
+        profile = Patient.objects.filter(user=id).first()
+        doctor = Doctor.objects.filter(user=current_user).first()
+        patient_report = Report.get_report(id)
+
+        if request.method == 'POST':
+            reportform = ReportForm(request.POST)
+            if reportform.is_valid():
+                report = reportform.save(commit=False)
+                report.user = profile.user
+                report.doctor = doctor
+                report.save()
+            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report})
+        else:
+            reportform = ReportForm()
+            
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report})
+
 
 @login_required(login_url='/accounts/login/')
 def editprofile(request):
@@ -135,17 +161,11 @@ def editprofile(request):
 
     
 @login_required(login_url='/accounts/login/')
-def patients_overview(request, doctor_id):
+def patients_overview(request):
     current_user = request.user
     title = "Covid Tracker - Patients Overview"
-
-    # patients = Patient.objects.order_by('-id').all()
-
-    # return render(request, 'patients_overview.html', {"title": title, "patients": patients})
-
-    
     if current_user.is_doctor:
-        patients = Patient.objects.order_by('-id').all()
+        patients = Patient.objects.all()
 
         return render(request, 'patients_overview.html', {"title": title, "patients": patients})
     else:

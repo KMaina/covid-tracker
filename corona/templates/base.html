@@ -11,12 +11,11 @@
     {% else %}
         <title>Covid-19 Tracker</title>
     {% endif %}
-
-
     
     {% block styles %}
-        {% bootstrap_css %}
+        {% bootstrap_css %}        
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">        
+        <link href='https://fonts.googleapis.com/css?family=Russo+One' rel='stylesheet'>
     {% endblock %}
 </head>
 <body>
@@ -29,5 +28,29 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
         {% bootstrap_javascript %}
     {% endblock %}
+    <style>
+        /* Logo styling start */   
+        .heading-image {
+          display: inline-block;  
+          width:95px; 
+          height:95px;              
+        }
+        .heading-word {      
+          display: inline-block; 
+          font-family: 'Russo One';          
+          margin-top: 5px;                
+          background: #373B44;  /* fallback for old browsers */
+          background: -webkit-linear-gradient(to left, #4286f4, #373B44);  /* Chrome 10-25, Safari 5.1-6 */
+          background: linear-gradient(to left, #4286f4, #373B44); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+          background-clip: text;                
+          text-decoration-color: transparent;
+          -webkit-background-clip: text;
+          -moz-background-clip: text;
+          -webkit-text-fill-color: transparent; 
+          -moz-text-fill-color: transparent;
+          -webkit-text-stroke: 0.03em white;                
+        }
+        /* Logo styling end */   
+    </style>
 </body>
 </html>

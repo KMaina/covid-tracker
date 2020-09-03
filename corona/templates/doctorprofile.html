@@ -3,6 +3,8 @@
 {% include 'material/includes/material_js.html' %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' />
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js'></script>
 {% block content %}
 {{block.super}}
     {% include "navbar.html" %}
@@ -21,8 +23,17 @@
             <h6 style="display: inline-block;margin-left: 15%; padding-right:15%;">Phone no.: <span style="font-size: 20px;">{{profile.phone}}</span></h6>            
             <h6 style="display: inline-block;">Hospital: <span style="font-size: 20px;">{{profile.hospital}}</span></h6>            
             <div class="row" style="margin-top: 30px;">
-              <div class="col">
-                  User location map
+              <div class="col">                  
+                <div id='map' style='width: 400px; height: 300px;'></div>
+                <script>
+                mapboxgl.accessToken = 'pk.eyJ1IjoibXVpYTIzIiwiYSI6ImNrZWp3dmw3bTA3M3cyeG53Zjl1MDU1MG0ifQ.TwlO7AlZn0eMUnpPEneUEg';
+                var map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+                    center: [-74.5, 40], // starting position [lng, lat]
+                    zoom: 9 // starting zoom
+                });
+                </script>
               </div>
               <div class="col">
                   <div class="container" style="background:white;">                                        
@@ -30,7 +41,7 @@
                         <tbody>
                           <tr>                                
                             <td colspan="3" style="font-weight: bold;">Reports done</td>                                                                                                                
-                            <td>-</td>                                                        
+                            <td>{{patient_report.count}}</td>                                                        
                           </tr>                          
                         </tbody>                                                                        
                       </table>

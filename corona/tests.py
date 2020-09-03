@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 from .models import *
 
 # Create your tests here.
@@ -8,6 +9,7 @@ class TestContact(TestCase):
         self.email = Contact(email='gkarumbi@gmail.com')
         self.phone = Contact(phone = '0722452772')
         self.location = Contact(location = 'Kigali')
+
 
     def test_instance(self):
         self.assertTrue(isinstance(self.name,Contact))
@@ -21,8 +23,6 @@ class TestContact(TestCase):
     def test_delete_contact(self):
         self.delete()
 
-from django.urls import reverse
-from .models import *
 class BaseTest(TestCase):
     def setUp(self):
         self.register_url=reverse('signup')
@@ -71,6 +71,7 @@ class RegisterTest(BaseTest):
     def test_user_unmatch_passwords(self):
         response=self.client.post(self.register_url,self.user_unmatch_password,format='text/html')
         self.assertEqual(response.status_code,302)
+
 # Create your tests here.
 class TestTreatment(TestCase):
     def setUp(self):
@@ -138,3 +139,5 @@ class TestReport(TestCase):
 
 if __name__ == '__main__':
     unittest.main() 
+    def test_delete_contact(self):
+        self.delete()

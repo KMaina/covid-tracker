@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 from tinymce.models import HTMLField
 from django.utils import timezone
 
+# Create your models here.
 class User(AbstractUser):
     is_doctor = models.BooleanField(default=False, blank=True)
     
-# Create your models here.
 class Contact(models.Model):
     name = models.CharField(max_length=25)
     email = models.CharField(max_length=25)
@@ -113,3 +113,18 @@ class Report(models.Model):
         report = reports.order_by("-post_date").first()
         return report
 
+class Contact(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)                
+    name = models.CharField(max_length=25)
+    email = models.CharField(max_length=25)
+    phone = models.CharField(max_length=25)
+    location = models.CharField(max_length=25)
+
+    def __str__(self):
+        return self.name
+
+    def save_contact(self):
+        self.save()
+
+    def delete_contact(self):
+        self.delete()

@@ -2,38 +2,50 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 <html>
-
     <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-      {%if title%}
-
-      <title>{{title}}</title>
-
-      {%endif%}
-
-      {% block styles %}
-        {% bootstrap_css %}
-      {% endblock %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {%if title%}
+            <title>{{title}}</title>
+        {%endif%}   
+        {% block styles %}
+            {% bootstrap_css %}
+            <link href='https://fonts.googleapis.com/css?family=Russo+One' rel='stylesheet'>
+        {% endblock %}
     </head>
-
     <body>
-
         {% block content %}
+            <!-- Content here-->
         {%endblock%}
-
-        <style>
-            body {
-                background: url(https://cdn.pixabay.com/photo/2020/02/10/04/56/virus-4835301_960_720.jpg);
-            
-                background-size: cover;
-            }
-        </style>
+        
         {% block scripts %}
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
             {% bootstrap_javascript %}
-        {% endblock %}
+        {% endblock %}        
+        <style>
+            /* Logo styling start */   
+            .heading-image {
+              display: inline-block;  
+              width:75px; 
+              height: 75px;              
+            }
+            .heading-word {      
+              display: inline-block; 
+              font-family: 'Russo One';
+              position: absolute;              
+              margin-top: 20px;      
+              background: #373B44;  /* fallback for old browsers */
+              background: -webkit-linear-gradient(to left, #4286f4, #373B44);  /* Chrome 10-25, Safari 5.1-6 */
+              background: linear-gradient(to left, #4286f4, #373B44); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+              background-clip: text;                
+              text-decoration-color: transparent;
+              -webkit-background-clip: text;
+              -moz-background-clip: text;
+              -webkit-text-fill-color: transparent; 
+              -moz-text-fill-color: transparent;
+              -webkit-text-stroke: 0.001em black;                
+            }
+            /* Logo styling end */   
+        </style>
     </body>
 </html>

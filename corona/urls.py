@@ -9,16 +9,14 @@ urlpatterns=[
     url('^$', views.home, name = "home"),    
     url('^accounts/profile/$', views.home, name='index'),
     url('^profile/$', views.profile, name='profile'),
+    url(r'^profile/visit/(\d+)$', views.visitprofile, name='visitprofile'),
     url('^profile/edit/$', views.editprofile, name='editprofile'),
-    url('^register/$', views.signup, name='signup'),    
-    url('accounts/profile/(?P<username>[-_\w.]+)$', views.profile, name= 'profiles'),
-    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        views.activate_account, name='activate'),
-    url(r'^login/$', views.signIn, name='login'), 
-    url('^doctor/$', views.home, name='doctor'), # not necessary
-    url(r'^patients_overview/(\d+)', views.patients_overview, name='patients_overview')    
+    url('^register/$', views.signup, name='signup'),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',views.activate_account, name='activate'),
+    url(r'^login/$', views.signIn, name='login'),     
+    url(r'^patients_overview/$', views.patients_overview, name='panel'),
+    url('contact/new/', views.profile, name = 'new-contact'),    
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
-
