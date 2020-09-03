@@ -1,0 +1,15 @@
+body, html {
+    background: white;
+    background-size: cover;
+}
+
+table {
+    background: #ffffff90;
+    height: 60vh !important;
+    overflow-y: scroll !important;
+}
+
+tbody {
+    height: 60vh;
+    overflow-y: scroll;
+}
