@@ -46,7 +46,19 @@
 
                 <!-- Patient live location cordinates on a map -->
                 <div class="col">
-                    User location map
+                  {% if current_user.is_doctor %}
+                  {% else %}
+                  <div class="col" id="map">                    
+                    <!-- User location map -->
+                    <p>Your are in <strong>{{ city }}</strong>,<strong>{{ country }}</strong> based on your ip address.</p>
+                    <iframe 
+                          frameborder="0"
+                         style="border:0; width:100%; height:100%; object-fit: cover;"
+                         src="https://www.google.com/maps/embed/v1/view?center={{ latitude }},{{ longitude }}&zoom=8&key={{ api_key }}"
+                         allowfullscreen>
+                    </iframe>
+                  </div>
+                  {% endif %}
                 </div>
 
                 <!-- Doctors report section-->
@@ -113,7 +125,7 @@
                           <form action="{% url 'visitprofile' profile.user.id %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                         
-                            {% bootstrap_form form %}
+                            {% bootstrap_form reportform %}
                             <input type="submit" class="btn btn-success btn-lg" value="Update report">
                           </form> 
                         </div>

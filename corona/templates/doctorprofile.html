@@ -24,16 +24,16 @@
             <h6 style="display: inline-block;">Hospital: <span style="font-size: 20px;">{{profile.hospital}}</span></h6>            
             <div class="row" style="margin-top: 30px;">
               <div class="col">                  
-                <div id='map' style='width: 400px; height: 300px;'></div>
-                <script>
-                mapboxgl.accessToken = 'pk.eyJ1IjoibXVpYTIzIiwiYSI6ImNrZWp3dmw3bTA3M3cyeG53Zjl1MDU1MG0ifQ.TwlO7AlZn0eMUnpPEneUEg';
-                var map = new mapboxgl.Map({
-                    container: 'map',
-                    style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
-                    center: [-74.5, 40], // starting position [lng, lat]
-                    zoom: 9 // starting zoom
-                });
-                </script>
+                <div class="col" id="map">
+                  <!-- User location map -->
+                  <p>Your are in <strong>{{ city }}</strong>,<strong>{{ country }}</strong> based on your ip address.</p>
+                  <iframe 
+                        frameborder="0"
+                       style="border:0; width:100%; height:100%; object-fit: cover;"
+                       src="https://www.google.com/maps/embed/v1/view?center={{ latitude }},{{ longitude }}&zoom=8&key={{ api_key }}"
+                       allowfullscreen>
+                  </iframe>
+                </div>
               </div>
               <div class="col">
                   <div class="container" style="background:white;">                                        

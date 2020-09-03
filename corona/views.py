@@ -131,12 +131,14 @@ def profile(request):
 
 @login_required(login_url='/accounts/login/')
 def visitprofile(request,id):
-    current_user = request.user      
+    current_user = request.user       
     if current_user.is_doctor == True:
         profile = Patient.objects.filter(user=id).first()
         doctor = Doctor.objects.filter(user=current_user).first()
+        contacts = Contact.objects.filter(user=id).all()   
         patient_report = Report.get_report(id)
-        
+        form = ContactForm()       
+
         if request.method == 'POST':
             reportform = ReportForm(request.POST)
             if reportform.is_valid():
@@ -144,11 +146,11 @@ def visitprofile(request,id):
                 report.user = profile.user
                 report.doctor = doctor
                 report.save()
-            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report})
+            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform,"form":form, "patient_report":patient_report,"contacts":contacts})
         else:
             reportform = ReportForm()
             
-        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report})
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform,"form":form, "patient_report":patient_report, "contacts":contacts})
 
 
 @login_required(login_url='/accounts/login/')
