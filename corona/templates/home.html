@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% include 'material/includes/material_css.html' %}
+{% include 'material/includes/material_js.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+{% endblock %}
+
+{% block content %}
+{{block.super}}    
+    <div class="row">
+        <div class="col">            
+            <div class="map" style="width: 50%; position: fixed;">
+                <h3 style="margin-top:10%;"> Get realtime stats on Coronavirus cases world wide.</h3>
+                <iframe src="https://ourworldindata.org/grapher/total-cases-covid-19?tab=map" width="100%" height="600px"></iframe>
+            </div>
+        </div>        
+        <div class="col">                            
+            <div class="data">
+                <table id="tablePreview" class="table table-striped table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Country</th>
+                            <th>Total Cases</th>
+                            <th>Total Active Cases</th>
+                            <th>Total Recovered</th>
+                            <th>New Cases Today</th>
+                            <th>New Deaths Today</th>
+                        </tr>
+                    </thead>
+                    <tbody style="max-height: 70vh; overflow-y: scroll;">
+                        {% for key, value in cov_data.items %}
+                            <tr>
+                                <td>{{value.ourid}}</td>
+                                <td>{{value.title}}</td>
+                                <td>{{value.total_cases}}</td>
+                                <td>{{value.total_active_cases}}</td>
+                                <td>{{value.total_recovered}}</td>
+                                <td class="data_today">{{value.total_new_cases_today}}</td>
+                                <td class="data_today">{{value.total_new_deaths_today}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <style>
+        body {
+            background: white;
+        }
+    </style>
+{% endblock %}

@@ -6,7 +6,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns=[
-    url('^$', views.home, name = "home"),    
+    url('^$', views.home, name = "home"),        
+    url('^stats/$', views.live_stat, name = "stats"),        
     url('^accounts/profile/$', views.home, name='index'),
     url('^profile/$', views.profile, name='profile'),
     url(r'^profile/visit/(\d+)$', views.visitprofile, name='visitprofile'),

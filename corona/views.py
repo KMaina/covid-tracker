@@ -18,12 +18,21 @@ import requests
 from django.conf import settings
 
 User = get_user_model()
+import requests
 
 # Create your views here.
-def home(request):
+def home(request):    
     title = "Covid Index Bootstrap Test"
     current_user = request.user
+    
     return render(request, 'index.html', {"title": title, "current_user":current_user})
+
+def live_stat(request):
+    cov_response = requests.get('https://api.thevirustracker.com/free-api?countryTotals=ALL')
+    cov_data = cov_response.json()
+    ref_data = cov_data['countryitems'][0]
+    
+    return render(request, 'home.html', {"cov_data": ref_data})
 
 def signIn(request):
     msg = []
