@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from .forms import SignupForm, LoginForm, ReportForm, DoctorForm, PatientForm
+from .forms import SignupForm, LoginForm, ReportForm, DoctorForm, PatientForm, ContactForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -12,8 +12,11 @@ from django.core.mail import EmailMessage
 from django.contrib.auth.views import login as auth_login
 from .models import User
 from django.contrib.auth import get_user_model
-from .models import Treatment, Status, Report, Patient, Doctor
+from .models import Treatment, Status, Report, Patient, Doctor, Contact
 from django.http import HttpResponseRedirect
+import requests
+from django.conf import settings
+
 User = get_user_model()
 
 # Create your views here.
@@ -92,18 +95,28 @@ def profile(request):
 
     else:
         profile = Patient.get_pat_profile(current_user)
-        patient_report = Report.objects.filter(user=current_user).first()    
-    
-        if request.method == 'POST':
-            reportform = Reportform(request.POST,request.FILES)
-            if reportform.is_valid():
-                report = reportform.save(commit=False)
-                report.user = current_user            
-                report.save()
-            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report})
+        patient_report = Report.objects.filter(user=current_user).first() 
+        
+        endpoint =  'http://api.ipstack.com/check?access_key={api_key}&format=1'
+        url = endpoint.format(api_key=settings.GEO_API_KEY)
+        response = requests.get(url)
+        geodata = response.json() 
+        google_api = settings.GOOGLE_API_KEY 
+        
+        if request.method =='POST':
+            form = ContactForm(request.POST)
+            if form.is_valid():
+                contact =form.save(commit=False)
+                contact.save()
+            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,'form':form})
         else:
-            reportform = ReportForm()        
-        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform, "patient_report":patient_report})
+            form = ContactForm()
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,'form':form,
+        'city': geodata['city'],
+        'country': geodata['country_name'],
+        'latitude': geodata['latitude'],
+        'longitude': geodata['longitude'],
+        'api_key': google_api})
 
 @login_required(login_url='/accounts/login/')
 def editprofile(request):
@@ -120,14 +133,3 @@ def editprofile(request):
             form = DoctorForm()        
         return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
 
-    else:
-        if request.method == 'POST':        
-            form = PatientForm(request.POST,request.FILES)
-            if form.is_valid():
-                add = form.save(commit=False)
-                add.user = current_user            
-                add.save()
-            return redirect('profile')
-        else:            
-            form = PatientForm()    
-        return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})

@@ -6,6 +6,9 @@
 {% block content %}
 {{block.super}}
     {% include "navbar.html" %}
+    <style>
+      
+    </style>
     <div class="row">
         <div class="col"></div>
         <div class="col-md-8" style="background: #b1e8fb77; "> 
@@ -23,14 +26,23 @@
             <h6 style="display: inline-block;margin-left: 15%; padding-right:15%;">Location: <span style="font-size: 20px;">{{profile.location}}</span></h6>
             <h6 style="display: inline-block;">Treatment: <span style="font-size: 20px;">Not-set</span></h6>            
             <div class="row" style="margin-top: 30px;">
-              <div class="col">
-                  User location map
+              <div class="col" id="map">
+                  <!-- User location map -->
+                  <p>Your are in <strong>{{ city }}</strong>,<strong>{{ country }}</strong> based on your ip address.</p>
+                  <iframe 
+                        frameborder="0"
+                       style="border:0; width:100%; height:100%; object-fit: cover;"
+                       src="https://www.google.com/maps/embed/v1/view?center={{ latitude }},{{ longitude }}&zoom=8&key={{ api_key }}"
+                       allowfullscreen>
+                  </iframe>
               </div>
               <div class="col">
                   <div class="container" style="background:white;">
                       <div class="container" style="padding: 10px;">
-                        <h5 style="text-align: center; color: blue; display: inline-block; padding-right: 30%;">Doctor's report</h5>  
-                        <button class="btn btn-primary" style="display: inline-block;" data-toggle="modal" data-target="#reportform" >Add Report</button>                      
+                        <h5 style="text-align: center; color: blue; display: inline-block; padding-right: 30%;">Doctor's report</h5> 
+                        {% if user.is_doctor %} 
+                        <button class="btn btn-primary" style="display: inline-block;" data-toggle="modal" data-target="#reportform" >Add Report</button> 
+                        {% endif %}                     
                       </div>                      
                       <table class="table table-hover">                                                    
                         <tbody>                                                    
@@ -67,6 +79,7 @@
               </div>
               
               <!-- Edit Health Report Modal -->
+              {% if user.is_doctor %}
               <div class="modal fade" id="reportform" tabindex="-1" role="dialog" aria-labelledby="reportform" aria-hidden="true" >
                 <div class="modal-dialog modal-lg modal-dialog-centered" role="document"  style="background:url('https://images.unsplash.com/photo-1581299327801-faeb40ea459e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1171&q=80')">
                   <div class="modal-content" style="background:white;" >
@@ -88,7 +101,7 @@
                     </div>    
                   </div>
                 </div>
-            </div>
+              {% endif %}  
             </div> 
             <div class="container" style="background: white; margin-top:15vh;">
               <h5>Contacts:</h5>
@@ -97,5 +110,23 @@
         <div class="col"></div>
     </div>    
 {% bootstrap_javascript %}
+<!-- <script>
+  function initMap(){
+    var options = {
+      zoom:8,
+      center:{lat:-0.0236,lng:37.9062}
+    }
+
+    var map = new google.maps.Map(document.getElementById('map'), options);
+
+    var marker = new google.maps.Marker({
+      position:{lat:0.0074,lng:37.0722},
+      map:map
+    });
+  }
+</script>
+<script defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAi2WMAlh_ol-sywUolU9RcBu4EMYvkmhU&callback=initMap">
+    </script> -->
 {% endblock %}
 
