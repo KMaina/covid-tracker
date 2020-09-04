@@ -96,7 +96,8 @@ def activate_account(request, uidb64, token):
 @login_required(login_url='/accounts/login/')
 def profile(request):
     current_user = request.user    
-
+    contactform=ContactForm() 
+    reportform = ReportForm()      
     if current_user.is_doctor == True:
         profile = Doctor.get_doc_profile(current_user)
         doctor = Doctor.objects.filter(user=current_user).first()
@@ -115,19 +116,15 @@ def profile(request):
         google_api = settings.GOOGLE_API_KEY         
 
         if request.method =='POST':
-            form = ContactForm(request.POST)
-            if form.is_valid():
-                contact= form.save(commit=False)
+            contactform=ContactForm(request.POST)
+            if contactform.is_valid():
+                contact= contactform.save(commit=False)
                 contact.user = current_user
                 contact.save()        
-            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,"form":form,"contacts":contacts,'city': geodata['city'],
-            'country': geodata['country_name'],
-            'latitude': geodata['latitude'],
-            'longitude': geodata['longitude'],
-            'api_key': google_api})
+            return redirect('profile')
         else:
-            form = ContactForm()       
-        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,"form":form,"contacts":contacts,'city': geodata['city'],
+            contactform=ContactForm()       
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user,"patient_report":patient_report,"contacts":contacts,"contactform":contactform,"reportform":reportform,'city': geodata['city'],
         'country': geodata['country_name'],
         'latitude': geodata['latitude'],
         'longitude': geodata['longitude'],
@@ -136,12 +133,13 @@ def profile(request):
 @login_required(login_url='/accounts/login/')
 def visitprofile(request,id):
     current_user = request.user       
+    contactform = ContactForm()       
     if current_user.is_doctor == True:
         profile = Patient.objects.filter(user=id).first()
         doctor = Doctor.objects.filter(user=current_user).first()
         contacts = Contact.objects.filter(user=id).all()   
         patient_report = Report.get_report(id)
-        form = ContactForm()       
+        
 
         if request.method == 'POST':
             reportform = ReportForm(request.POST)
@@ -150,11 +148,11 @@ def visitprofile(request,id):
                 report.user = profile.user
                 report.doctor = doctor
                 report.save()
-            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform,"form":form, "patient_report":patient_report,"contacts":contacts})
+            return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform,"contactform":contactform, "patient_report":patient_report,"contacts":contacts})
         else:
             reportform = ReportForm()
             
-        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform,"form":form, "patient_report":patient_report, "contacts":contacts})
+        return render(request, 'patientprofile.html', {"profile": profile, "current_user": current_user, "reportform":reportform,"contactform":contactform, "patient_report":patient_report, "contacts":contacts})
 
 
 @login_required(login_url='/accounts/login/')
