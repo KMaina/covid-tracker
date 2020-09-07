@@ -10,16 +10,31 @@
 {% endblock %}
 
 {% block content %}
-{{block.super}}    
-    <div class="row">
-        <div class="col">            
-            <div class="map" style="width: 50%; position: fixed;">
-                <h3 style="margin-top:10%;"> Get realtime stats on Coronavirus cases world wide.</h3>
-                <iframe src="https://ourworldindata.org/grapher/total-cases-covid-19?tab=map" width="100%" height="600px"></iframe>
+{{block.super}}
+
+    <div class="container-fluid">
+        <div class="news-ticker">
+            <div class="marquee-title">
+                <strong>NEWS: </strong>
             </div>
-        </div>        
-        <div class="col">                            
-            <div class="data">
+            <div class="news-marquee">
+                <marquee behavior="" direction="">
+                    {% for new in news %}
+                        <span>{{new}}&nbsp;||&nbsp;</span>
+                    {% endfor %}
+                </marquee>
+            </div>
+        </div>
+    </div> 
+    <div class="container-fluid data-data">
+        <div class="data-area">
+            <div class="cov-map">
+                <div class="map">
+                    <h3> Realtime stats on Coronavirus cases world wide.</h3>
+                    <iframe src="https://ourworldindata.org/grapher/total-cases-covid-19?tab=map" width="100%" height="600px"></iframe>
+                </div>
+            </div>
+            <div class="cov-data">
                 <table id="tablePreview" class="table table-striped table-hover table-sm">
                     <thead>
                         <tr>
@@ -32,7 +47,7 @@
                             <th>New Deaths Today</th>
                         </tr>
                     </thead>
-                    <tbody style="max-height: 70vh; overflow-y: scroll;">
+                    <tbody">
                         {% for key, value in cov_data.items %}
                             <tr>
                                 <td>{{value.ourid}}</td>
@@ -49,9 +64,10 @@
             </div>
         </div>
     </div>
-    <style>
-        body {
-            background: white;
-        }
-    </style>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 {% endblock %}

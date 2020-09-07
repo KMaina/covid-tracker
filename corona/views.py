@@ -16,13 +16,14 @@ from .models import Treatment, Status, Report, Patient, Doctor, Contact
 from django.http import HttpResponseRedirect
 import requests
 from django.conf import settings
+from decouple import config,Csv
 
 User = get_user_model()
 import requests
 
 # Create your views here.
 def home(request):    
-    title = "Covid Index Bootstrap Test"
+    title = "Covid Tracker"
     current_user = request.user
     
     return render(request, 'index.html', {"title": title, "current_user":current_user})
@@ -31,8 +32,22 @@ def live_stat(request):
     cov_response = requests.get('https://api.thevirustracker.com/free-api?countryTotals=ALL')
     cov_data = cov_response.json()
     ref_data = cov_data['countryitems'][0]
-    
-    return render(request, 'home.html', {"cov_data": ref_data})
+
+    # Covid-19 News
+    news_url = 'http://newsapi.org/v2/everything?q=covid-19&from=2020-09-03&to=2020-09-03&sortBy=popularity&apiKey='
+    news_api = config('NEWS_API_KEY')
+    news_reponse = requests.get(news_url + news_api)
+    # news_reponse = requests.get('http://newsapi.org/v2/everything?q=covid-19&from=2020-09-03&to=2020-09-03&sortBy=popularity&apiKey=0ffd6c1788664312bcf394317d938e5e')
+    # Fix url getting data
+    news_data = news_reponse.json()
+    news = news_data['articles']
+
+    news_articles = []
+
+    for ar in news:
+        news_articles.append(ar["description"])
+
+    return render(request, 'home.html', {"cov_data": ref_data, "news": news_articles})
 
 def signIn(request):
     msg = []
