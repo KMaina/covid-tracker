@@ -16,6 +16,7 @@ from .models import Treatment, Status, Report, Patient, Doctor, Contact
 from django.http import HttpResponseRedirect
 import requests
 from django.conf import settings
+from django.contrib import messages
 
 User = get_user_model()
 import requests
@@ -192,5 +193,30 @@ def patients_overview(request):
     else:
         return redirect(home)
 
+def doc_su(request):
+    current_user = request.user
+    if current_user.is_staff:
+        users = User.objects.filter(is_doctor = False).filter(is_staff = False).order_by('-id').all()
 
+        title = "Covid-Tracker: Doctor Verification"
+
+        return render(request, 'doctor_verification.html', {"title": title, "users": users})
+    else:
+        return redirect(home)
+
+def make_doctor(request, user_id):
+    current_user = request.user
+
+    if current_user.is_staff:
+        user = User.objects.get(id = user_id)
+        user.is_doctor = True
+        user.save()
+
+        messages.success(request, r'{{user.username}} has successfully been confirmed as a doctor')
+
+        return redirect(doc_su)
+    
+    else:
+        messages.warning(request, 'You do not have permission to perform this function')
+        return redirect(doc_su)
 

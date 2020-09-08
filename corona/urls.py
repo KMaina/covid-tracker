@@ -16,7 +16,9 @@ urlpatterns=[
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',views.activate_account, name='activate'),
     url(r'^login/$', views.signIn, name='login'),     
     url(r'^patients_overview/$', views.patients_overview, name='panel'),
-    url('contact/new/', views.profile, name = 'new-contact'),    
+    url('contact/new/', views.profile, name = 'new-contact'),
+    url(r'^doctor/verification/', views.doc_su, name='doc_su'),
+    url(r'^doctor/verification/confirm_doctor/(\d+)$', views.make_doctor, name='make_doctor'),
 ]
 
 if settings.DEBUG:
