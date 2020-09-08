@@ -7,6 +7,7 @@ from django.utils import timezone
 # Create your models here.
 class User(AbstractUser):
     is_doctor = models.BooleanField(default=False, blank=True)
+    is_staff = models.BooleanField(default=False, blank=True)
     
 #Patient treatment option
 class Treatment(models.Model):
