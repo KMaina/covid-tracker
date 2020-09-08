@@ -39,6 +39,7 @@ SECRET_KEY = config('SECRET_KEY')
 INSTALLED_APPS = [
     'corona',
     'bootstrap4',
+    'bootstrap3',
     'material',
     'material.frontend',
     'fontawesome_5',
