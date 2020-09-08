@@ -8,48 +8,104 @@
 {% block content %}
 {{block.super}}
     {% include "navbar.html" %}
-    <div class="row">
-        <div class="col"></div>
-        <div class="col-md-8" style="background: #b1e8fb77; "> 
-            <div class="container" style="margin-top: 30px; text-align: center;">
-                <img src="{{ profile.photo_url|default_if_none:'https://icon-library.net/images/patient-icon/patient-icon-25.jpg' }}" alt="profile picture" style=" width:225px; height: 225px; border-radius:50%;">                                
-                <a href="{% url 'editprofile' %}"><button style="display: inline-block;" class="btn btn-primary">Update Profile</button></a>
-                <h3>{{current_user.username}}</h3>
-            </div>
-            <div class="container" style="margin-left: 12%; margin-top: 30px;">
-                <h6 style="display: inline-block; padding-right: 15%;">Name: <span style="font-size: 20px;">{{profile.name}}</span></h6>
-                <h6 style="display: inline-block;">Email: <span style="font-size: 20px;">{{profile.user.email}}</span></h6>
+    <div class="row" style="width: 100%;  background:linear-gradient(rgba(253, 253, 253, 0.795), rgba(255, 255, 255, 0.089)), url(https://images.wallpapersden.com/image/download/galaxy-s20-ultra-stock_69089_3200x3200.jpg); background-position: -40% 90%;" >
+        
+        <div class="container" style="background: #eef8fc; height: 90.6vh; "> 
+            {% if profile.photo_url %}
+          <div class="row" style=" height:17vh; background:linear-gradient(rgba(253, 253, 253, 0.041), rgba(22, 147, 248, 0.247)), url('{{profile.photo_url}}'); ">
+              {% else %}
+          <div class="row" style=" height:17vh; background:linear-gradient(rgba(253, 253, 253, 0.925),rgba(253, 253, 253, 0.637)), url('https://files.123freevectors.com/wp-content/original/131391-light-blue-polygon-pattern-abstract-background.jpg');">
+            {% endif %}
+            
+            <!-- Profile Picture-->
+            <div class="container" style="margin-top: 10px; position: absolute;text-align: center;">                                
+              <div class="row" style="width:100%; position: absolute;">      
+                <div class="col"></div>      
+                <div class="col">
+                  <a href="{% url 'editprofile' %}"><button style="margin-left:71%;" class="btn btn-primary"><span class="glyphicon">&#x270f;</span>Profile</button></a>                                 
+                </div>                                    
+              </div>                
+              <img src="{{ profile.photo_url|default_if_none:'https://icon-library.net/images/patient-icon/patient-icon-25.jpg' }}" alt="profile picture" style=" width:200px; height: 200px; border-radius:50%;">                                                            
             </div>            
-            <h6 style="display: inline-block;margin-left: 15%; padding-right:15%;">Phone no.: <span style="font-size: 20px;">{{profile.phone}}</span></h6>            
-            <h6 style="display: inline-block;">Hospital: <span style="font-size: 20px;">{{profile.hospital}}</span></h6>            
-            <div class="row" style="margin-top: 30px;">
-              <div class="col">                  
-                <div class="col" id="map">
-                  <!-- User location map -->
-                  <p>Your are in <strong>{{ city }}</strong>,<strong>{{ country }}</strong> based on your ip address.</p>
-                  <iframe 
-                        frameborder="0"
-                       style="border:0; width:100%; height:100%; object-fit: cover;"
-                       src="https://www.google.com/maps/embed/v1/view?center={{ latitude }},{{ longitude }}&zoom=8&key={{ api_key }}"
-                       allowfullscreen>
-                  </iframe>
+          </div>     
+          <h3 style="color: #0a82f3de;; font-weight: bold; text-align: center; margin-top: 80px;">Dr. {{profile.user}}</h3>
+            
+          <div class="row">
+            <div class="col"></div>
+            <div class="col-md-4" style="margin-top: 10px;">
+              
+              <!-- Name -->
+              <div class="input-group mb-3" style="width: 350px;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" style="color: black; font-weight: bold; font-size: 15px;">Name:</span>
                 </div>
+                <input type="text" class="form-control details" placeholder="{{profile.name}}" aria-label="Username" aria-describedby="basic-addon1" style="background: transparent;" readonly>
+              </div>                
+
+              <!-- Email -->
+              <div class="input-group mb-3" style="width: 350px;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" style="color: black; font-weight: bold; font-size: 15px;">Email:</span>
+                </div>
+                <input type="text" class="form-control details" placeholder="{{profile.user.email}}" aria-label="Username" aria-describedby="basic-addon1" style="background: transparent;" readonly>
+              </div>  
+
+            </div>
+            <div class="col-md-4" style="margin-top: 10px;">
+              
+              <!-- Phone -->
+              <div class="input-group mb-3" style="width: 200px;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" style="color: black; font-weight: bold; font-size: 15px;">Phone:</span>
+                </div>
+                <input type="text" class="form-control details" placeholder="{{profile.phone}}" aria-label="Username" aria-describedby="basic-addon1" style="background: transparent;" readonly>
               </div>
-              <div class="col">
-                  <div class="container" style="background:white;">                                        
-                      <table class="table table-hover">                                                   
-                        <tbody>
-                          <tr>                                
-                            <td colspan="3" style="font-weight: bold;">Reports done</td>                                                                                                                
-                            <td>{{patient_report.count}}</td>                                                        
-                          </tr>                          
-                        </tbody>                                                                        
-                      </table>
-                  </div>
-              </div>                                        
-            </div>             
+
+              <!-- Hospital -->
+              <div style="width: fit-content; border-bottom: solid 0.02em grey;">
+                <div class="input-group-prepend" style="display:inline-block;">
+                  <span class="input-group-text" style="color: black; font-weight: bold; font-size: 15px;background: transparent;">Hospital:</span>
+                </div>
+                <span style="display:inline-block; font-size: 20px;margin-left: 5px; padding-right: 20px;"> {{profile.hospital}}</span>
+              </div>   
+
+            </div>
+            <div class="col"></div>
+          </div>
+          <style>
+            .details {                  
+              border-top:transparent;
+              border-right:transparent;                                  
+            }
+          </style>                            
+          <div class="row" style="margin-top: 30px;">
+            <div class="col">                  
+              <div class="col" id="map">
+                <!-- User location map -->
+                <p>Your are in <strong>{{ city }}</strong>,<strong>{{ country }}</strong> based on your ip address.</p>
+                <iframe 
+                      frameborder="0"
+                     style="border:0; width:100%; height:100%; object-fit: cover;"
+                     src="https://www.google.com/maps/embed/v1/view?center={{ latitude }},{{ longitude }}&zoom=8&key={{ api_key }}"
+                     allowfullscreen>
+                </iframe>
+              </div>
+            </div>
+            <div class="col">
+                <div class="container" style="background:white;">                                        
+                    <table class="table table-hover">                                                   
+                      <tbody>
+                        <tr>                                
+                          <td colspan="3" style="font-weight: bold;">Reports done</td>                                                                                                                
+                          <td>{{patient_report.count}}</td>                                                        
+                        </tr>                          
+                      </tbody>                                                                        
+                    </table>
+                </div>
+            </div>                                        
+          </div>             
         </div>
-        <div class="col"></div>
+        
     </div>
     
     

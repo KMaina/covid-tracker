@@ -12,7 +12,7 @@ from django.core.mail import EmailMessage
 from django.contrib.auth.views import login as auth_login
 from .models import User, Patient, Doctor, Contact
 from django.contrib.auth import get_user_model
-from .models import Treatment, Status, Report, Patient, Doctor, Contact
+from .models import Treatment, Status, Report, Patient, Doctor, Contact, User
 from django.http import HttpResponseRedirect
 import requests
 from django.conf import settings
@@ -28,11 +28,12 @@ def home(request):
     return render(request, 'index.html', {"title": title, "current_user":current_user})
 
 def live_stat(request):
+    current_user = request.user
     cov_response = requests.get('https://api.thevirustracker.com/free-api?countryTotals=ALL')
     cov_data = cov_response.json()
     ref_data = cov_data['countryitems'][0]
     
-    return render(request, 'home.html', {"cov_data": ref_data})
+    return render(request, 'home.html', {"cov_data": ref_data, "current_user":current_user})
 
 def signIn(request):
     msg = []
@@ -159,6 +160,7 @@ def visitprofile(request,id):
 def editprofile(request):
     current_user = request.user          
     if current_user.is_doctor == True:
+        profile = Doctor.get_doc_profile(current_user)
         if request.method == 'POST':        
             form = DoctorForm(request.POST,request.FILES)
             if form.is_valid():
@@ -168,11 +170,12 @@ def editprofile(request):
             return redirect('profile')
         else:           
             form = DoctorForm()        
-        return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
+        return render(request, 'profile_edit.html', {"current_user": current_user, "form":form,"profile":profile})
     
     else:
+        profile = Patient.get_pat_profile(current_user)
         if request.method == 'POST':        
-            form = PatientForm(request.POST,request.FILES)
+            form = PatientForm(request.POST,request.FILES)            
             if form.is_valid():
                 update = form.save(commit=False)
                 update.user = current_user            
@@ -180,7 +183,7 @@ def editprofile(request):
             return redirect('profile')
         else:           
             form = PatientForm()        
-        return render(request, 'profile_edit.html', {"current_user": current_user, "form":form})
+        return render(request, 'profile_edit.html', {"current_user": current_user, "form":form,"profile":profile})
 
 
 @login_required(login_url='/accounts/login/')
@@ -188,7 +191,7 @@ def patients_overview(request):
     current_user = request.user
     title = "Covid Tracker - Patients Overview"
     if current_user.is_doctor:
-        patients = Patient.objects.all()
+        patients = Patient.objects.all()        
 
         return render(request, 'patients_overview.html', {"title": title, "patients": patients})
     else:
