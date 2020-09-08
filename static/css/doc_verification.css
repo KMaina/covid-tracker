@@ -1,10 +1,36 @@
+.doctor-button {
+    width: 100%;
+    margin: 20px auto 20px auto;
+}
+
+.doctor-button button {
+    float: right;
+    margin-bottom: 20px;
+}
+
+.doctor-button button:hover {
+    transform: scale(1.1);
+}
+
+table {
+    width: auto;
+}
 .user-table {
-    margin: 30px;
+    margin: 30px auto;
     padding: 10px;
     border: 1px solid #00000050;
     box-shadow: 0px 7px 19px 5px rgba(0,0,0,0.75);
 }
 
+th, td {
+    padding: 10px;
+}
+
 td a:hover {
     transform: scale(1.1);
+}
+
+.modal-body {
+    max-height: 60vh;
+    overflow-y: scroll;
 }

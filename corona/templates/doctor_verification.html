@@ -5,7 +5,7 @@
 {% load bootstrap4 %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/doc_verification.css' %}">
+<link rel="stylesheet" href="{% static 'css/doc_verification.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -13,14 +13,19 @@
 {% include "navbar.html" %}
 <div class="container">
     {% if messages %}
-		{% for message in messages %}
-			<div class="alert alert-{{message.tags}} m-2 text-center" id="msg" role="alert">
-				{{ message }}
-			</div>
-		{% endfor %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} m-2 text-center" id="msg" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
     {% endif %}
-    
-    <table id="tablePreview" class="table table-hover table-sm user-table">
+    <div class="doctor-button">
+        <button type="button" class="btn btn-primary shadow" data-toggle="modal" data-target="#exampleModal3">
+            View Doctors List
+        </button>
+    </div>
+
+    <table class="table table-hover table-sm user-table">
         <!--Table head-->
         <thead>
             <tr>
@@ -33,15 +38,55 @@
         </thead>
         <tbody>
             {% for user in users %}
-                <tr>
-                    <td>{{user.id}}</td>
-                    <td>{{user.username}}</td>
-                    <td>{{user.date_joined}}</td>
-                    <td>{{user.is_doctor}}</td>
-                    <td><a href="{% url 'make_doctor' user.id %}" class="btn btn-primary btn-sm shadow">Confirm Doctor</a></td>
-                </tr>
+            <tr>
+                <td>{{user.id}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.date_joined}}</td>
+                <td>{{user.is_doctor}}</td>
+                <td><a href="{% url 'make_doctor' user.id %}" class="btn btn-primary btn-sm shadow">Confirm Doctor</a>
+                </td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModal3Label"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModal3Label">Registered Doctors</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover table-sm user-table">
+                        <!--Table head-->
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Date Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doctor in doctors %}
+                                <tr>
+                                    <td>{{doctor.id}}</td>
+                                    <td>{{doctor.username}}</td>
+                                    <td>{{doctor.date_joined}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
