@@ -9,19 +9,21 @@ class TestContact(TestCase):
         self.email = Contact(email='gkarumbi@gmail.com')
         self.phone = Contact(phone = '0722452772')
         self.location = Contact(location = 'Kigali')
-
+        self.username = User(id=1, username="george")
+        self.username.save()
 
     def test_instance(self):
         self.assertTrue(isinstance(self.name,Contact))
         self.assertTrue(isinstance(self.email,Contact))
         self.assertTrue(isinstance(self.phone,Contact))
         self.assertTrue(isinstance(self.location, Contact))
+        self.assertTrue(isinstance(self.username, User))
 
-    def test_save_contact(self):
-        self.save()
+    def test_save_user(self):
+        self.username.save()
 
-    def test_delete_contact(self):
-        self.delete()
+    def test_delete_user(self):
+        self.username.delete
 
 class BaseTest(TestCase):
     def setUp(self):
@@ -60,17 +62,17 @@ class RegisterTest(BaseTest):
     #Test user can register
     def test_user_can_register(self):
         response=self.client.post(self.register_url,self.user,format='text/html')
-        self.assertEqual(response.status_code,302)
+        self.assertEqual(response.status_code,200)
     
     #Test user can't register with a short-password
     def test_user_short_password(self):
         response=self.client.post(self.register_url,self.user_short_password,format='text/html')
-        self.assertEqual(response.status_code,302)
+        self.assertEqual(response.status_code,200)
 
     #Test user can't register with a unmatching-passwords
     def test_user_unmatch_passwords(self):
         response=self.client.post(self.register_url,self.user_unmatch_password,format='text/html')
-        self.assertEqual(response.status_code,302)
+        self.assertEqual(response.status_code,200)
 
 # Create your tests here.
 class TestTreatment(TestCase):
