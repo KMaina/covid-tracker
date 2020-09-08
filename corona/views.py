@@ -203,9 +203,11 @@ def doc_su(request):
     if current_user.is_staff:
         users = User.objects.filter(is_doctor = False).filter(is_staff = False).order_by('-id').all()
 
+        doctors = User.objects.filter(is_doctor = True).all()
+
         title = "Covid-Tracker: Doctor Verification"
 
-        return render(request, 'doctor_verification.html', {"title": title, "users": users,"current_user":current_user})
+        return render(request, 'doctor_verification.html', {"title": title, "users": users,"current_user":current_user, "doctors": doctors})
     else:
         return redirect(home)
 
