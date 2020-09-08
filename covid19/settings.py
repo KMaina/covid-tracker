@@ -39,6 +39,7 @@ SECRET_KEY = config('SECRET_KEY')
 INSTALLED_APPS = [
     'corona',
     'bootstrap4',
+    'bootstrap3',
     'material',
     'material.frontend',
     'fontawesome_5',
@@ -166,6 +167,8 @@ EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 AUTH_USER_MODEL = 'corona.User'
 

@@ -14,179 +14,255 @@
     <!-- Add navigation Bar-->
     {% include "navbar.html" %}
       <!--Main row -->
-      <div class="row">          
-
-        <div class="col-md-2"><!--Empty column to center the profile--> </div>      
-          <div class="col-md-8" style="background: #b1e8fb77;"> 
-              
+      <div class="row" style="width: 100vw;  background:linear-gradient(#fdfdfdcb, rgba(255, 255, 255, 0.089)), url(https://images.wallpapersden.com/image/download/galaxy-s20-ultra-stock_69089_3200x3200.jpg); background-position: -30% 90%;" >
+        
+        <div class="container" style="background: white" > 
+            {% if profile.photo_url %}
+          <div class="row" style=" height:17vh; background:linear-gradient(rgba(253, 253, 253, 0.041), rgba(22, 147, 248, 0.247)), url('{{profile.photo_url}}'); background-position: 0 32%;">
+              {% else %}
+          <div class="row" style=" height:17vh; background:linear-gradient(rgba(253, 253, 253, 0.925),rgba(253, 253, 253, 0.637)), url('https://files.123freevectors.com/wp-content/original/131391-light-blue-polygon-pattern-abstract-background.jpg'); background-position: 0 32%;">
+            {% endif %}
+            
             <!-- Profile Picture-->
-            <div class="container" style="margin-top: 30px; text-align: center;">                
-                <img src="{{ profile.photo_url|default_if_none:'https://icon-library.net/images/patient-icon/patient-icon-25.jpg' }}" alt="profile picture" style=" width:225px; height: 225px; border-radius:50%;">                                
+            <div class="container" style="margin-top: 10px; position: absolute;">
                 {% if current_user.is_doctor %}
                   <!-- If you're a doctor you get nothing-->
                 {% else %}
-                  <a href="{% url 'editprofile' %}"><button style="display: inline-block;" class="btn btn-primary">Update Profile</button></a>                  
-                {% endif %}
-            </div>
-            
-            <!-- Name and email of profile -->
-            <div class="container" style="margin-left: 12%; margin-top: 30px;">
-                <h6 style="display: inline-block; padding-right: 15%;">Name: <span style="font-size: 20px;">{{profile.name}}</span></h6>
-                <h6 style="display: inline-block;">Email: <span style="font-size: 20px;">{{profile.user.email}}</span></h6>
-            </div>
-                            
-            <!-- Profile details i.e Phone,location, their status, prefered treatment-->
-            <h6 style="display: inline-block;margin-left: 15%; padding-right:15%;">Phone no.: <span style="font-size: 20px;">{{profile.phone}}</span></h6>
-            <h6 style="display: inline-block;">Status: <span style="font-size: 20px;">{{patient_report.status}}</span></h6>            
-            <h6 style="display: inline-block;margin-left: 15%; padding-right:15%;">Location: <span style="font-size: 20px;">{{profile.location}}</span></h6>
-            <h6 style="display: inline-block;">Treatment: <span style="font-size: 20px;">{{patient_report.treatment}}</span></h6>            
-              
-              
-              <div class="row" style="margin-top: 30px;">
-
-                <!-- Patient live location cordinates on a map -->
-                <div class="col">
-                  {% if current_user.is_doctor %}
-                  {% else %}
-                  <div class="col" id="map">                    
-                    <!-- User location map -->
-                    <p>Your are in <strong>{{ city }}</strong>,<strong>{{ country }}</strong> based on your ip address.</p>
-                    <iframe 
-                          frameborder="0"
-                         style="border:0; width:100%; height:100%; object-fit: cover;"
-                         src="https://www.google.com/maps/embed/v1/view?center={{ latitude }},{{ longitude }}&zoom=8&key={{ api_key }}"
-                         allowfullscreen>
-                    </iframe>
+                  <div class="row" style="width:100%; position: absolute;">      
+                    <div class="col"></div>      
+                    <div class="col">
+                      <a href="{% url 'editprofile' %}"><button style="margin-left:71%;" class="btn btn-primary"><span class="glyphicon">&#x270f;</span>Profile</button></a>                                 
+                    </div>                                    
                   </div>
-                  {% endif %}
+                {% endif %}                              
+              <img src="{{ profile.photo_url|default_if_none:'https://icon-library.net/images/patient-icon/patient-icon-25.jpg' }}" alt="profile picture" style=" width:200px; height: 200px; border-radius:50%; display: inline-block;">                                              
+              <h3 style="color: white; font-weight: bold;  margin-left: 35px;display: inline-block;">{{profile.user}}</h3>
+            </div>            
+          </div>     
+
+          <div class="row">
+            <div class="col-sm-2" style="height: 100px;"></div>
+            <div class="col" style="padding-left: 60px; margin-top: 20px;">
+              
+              <!-- Name -->
+              <div class="input-group mb-3" style="width: 350px;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" style="color: black; font-weight: bold; font-size: 15px;">Name:</span>
                 </div>
-
-                <!-- Doctors report section-->
-                <div class="col">
-                  <div class="container" style="background:white;">
-
-                    <!-- The section heading and if condition to allow only doctors to access the input button -->
-                    <div class="container" style="padding: 10px;">
-                      <h5 style="text-align: center; color: blue; display: inline-block; padding-right: 30%;">Doctor's report</h5>  
-                      {% if current_user.is_doctor %}
-                        <button class="btn btn-primary" style="display: inline-block;" data-toggle="modal" data-target="#reportform" >Add Report</button>                      
-                      {% else %}
-                      {% endif %}
-                    </div>  
-                    
-                    <!-- Report table-->              
-                    <table class="table table-hover">                                                    
-                          <tbody>                                                    
-                            <tr>                                
-                              <td colspan="3" style="font-weight: bold;">Temperature</td>                                
-                              {% if patient_report.temp %}
-                              <td> {{patient_report.temp}} °C</td>
-                              {% else %}
-                              <td>--°C</td>                            
-                              {% endif %}
-                            </tr>
-                            <tr>
-                              <td colspan="3" style="font-weight: bold;">Test No.</td>                                                                
-                              {% if patient_report.kit %}
-                              <td> {{patient_report.kit}}</td>
-                              {% else %}
-                              <td>----</td>                            
-                              {% endif %}
-                            </tr>         
-                            <tr>
-                              <td style="font-weight: bold;">Comment</td>                                
-                              {% if patient_report.comments %}
-                                <td colspan="4">
-                                  {{patient_report.comments | safe}}
-                                  <p style="font-size: 12px; color: grey; margin-left: 60%;">Dr. {{patient_report.doctor}}</p>
-                                </td>
-                              {% else %}
-                                <td colspan="4"> No comments yet.</td>
-                              {% endif %}
-                            </tr>                                               
-                          </tbody>                                                                        
-                    </table>
-                    
-                  </div>
+                <input type="text" class="form-control details" placeholder="{{profile.name}}" aria-label="Username" aria-describedby="basic-addon1" style="background: transparent;" readonly>
+              </div>                
+              
+              <!-- Email -->
+              <div class="input-group mb-3" style="width: 350px;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" style="color: black; font-weight: bold; font-size: 15px;">Email:</span>
                 </div>
+                <input type="text" class="form-control details" placeholder="{{profile.user.email}}" aria-label="Username" aria-describedby="basic-addon1" style="background: transparent;" readonly>
+              </div>  
+             
+              <!-- Phone -->
+              <div class="input-group mb-3" style="width: 200px;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" style="color: black; font-weight: bold; font-size: 15px;">Phone:</span>
+                </div>
+                <input type="text" class="form-control details" placeholder="{{profile.phone}}" aria-label="Username" aria-describedby="basic-addon1" style="background: transparent;" readonly>
+              </div>
 
-                <!-- Edit Health Report Modal -->
-                <div class="modal fade" id="reportform" tabindex="-1" role="dialog" aria-labelledby="reportform" aria-hidden="true" >
-                  <div class="modal-dialog modal-lg modal-dialog-centered" role="document"  style="background:url('https://images.unsplash.com/photo-1581299327801-faeb40ea459e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1171&q=80')">
-                    <div class="modal-content" style="background:white;" >
-                      <div class="modal-header">
-                        <h4 class="modal-title" style="margin-left: 40%;">Doctor's Report</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div> 
-                      <div class="modal-body">
-                        <div class="container" style="text-align: center; width:80%;">
-                          <form action="{% url 'visitprofile' profile.user.id %}" method="post" enctype="multipart/form-data">
-                            {% csrf_token %}
-                        
-                            {% bootstrap_form reportform %}
-                            <input type="submit" class="btn btn-success btn-lg" value="Update report">
-                          </form> 
-                        </div>
-                      </div>    
+            </div>
+            <div class="col" style="padding-left: 60px; margin-top: 20px;">
+              <!-- Profile details i.e Phone,location, their status, prefered treatment-->                 
+              
+              <!-- Location -->
+              <div class="input-group mb-3" style="width: 250px;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" style="color: black; font-weight: bold; font-size: 15px;">Location:</span>
+                </div>
+                <input type="text" class="form-control details" placeholder="{{profile.location}}" aria-label="Username" aria-describedby="basic-addon1" style="background: transparent;" readonly>
+              </div>  
+              {% ifequal patient_report.status.id 3 %}
+                  <!--Test-in-progress Status -->
+                  <div class="input-group mb-3" style="width: 250px;">
+                    <div class="input-group-prepend" style="border: solid orange 0.02em;">
+                      <span class="input-group-text" style="color: black; font-weight: bold; font-size: 15px;">Status:</span>
                     </div>
+                    <input type="text" class="form-control details" placeholder="{{patient_report.status}}" aria-label="Username" aria-describedby="basic-addon1" style="background: rgba(255, 166, 0, 0.288);border-bottom: solid orange 0.02em;" readonly>
+                  </div>              
+              {% else %}
+                {% ifequal patient_report.status.id 1 %}
+                  <!--Positive Status -->
+                  <div class="input-group mb-3" style="width: 250px;">
+                    <div class="input-group-prepend" style="border: solid red 0.02em;">
+                      <span class="input-group-text" style="color: black; font-weight: bold; font-size: 15px;">Status:</span>
+                    </div>
+                    <input type="text" class="form-control details" placeholder="{{patient_report.status}}" aria-label="Username" aria-describedby="basic-addon1" style="background: rgba(255, 0, 0, 0.185);border-bottom: solid red 0.02em;" readonly>
                   </div>
+                {% else %}
+                  <!--Negative Status -->
+                  <div class="input-group mb-3" style="width: 250px;">
+                    <div class="input-group-prepend" style="border: solid green 0.02em;">
+                      <span class="input-group-text" style="color: black; font-weight: bold; font-size: 15px;">Status:</span>
+                    </div>
+                    <input type="text" class="form-control details" placeholder="{{patient_report.status}}" aria-label="Username" aria-describedby="basic-addon1" style="background: rgba(0, 255, 34, 0.253);border-bottom: solid green 0.02em;" readonly>
+                  </div>
+                {% endifequal %}
+              {% endifequal %}
+              <!-- Treatment -->
+              <div class="input-group mb-3" style="width: 250px;">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" style="color: black; font-weight: bold; font-size: 15px;">Treatment:</span>
                 </div>
-
-              </div> 
-
-              <!-- Contact tracing section -->
-              <div class="container" style="background: white; margin-top:15vh;">
-                <div class="container">
-                  <div class="row">  
-                    
-                    <!-- Contact tracing table -->
-                    <table class="table">
-                      <thead class="thead-dark">
-                        <tr>                            
-                          <th scope="col">Name</th>
-                          <th scope="col">Email</th>
-                          <th scope="col">Phone</th>
-                          <th scope="col">Location</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for cont in contacts %}
-                        <tr>                            
-                          <td>{{cont.name}}</td>
-                          <td>{{cont.email}}</td>
-                          <td>{{cont.phone}}</td>
-                          <td>{{cont.location}}</td>
-                        </tr>
-                        {% endfor %}
-                      </tbody>
-                    </table>   
-
-                  </div>
-
-                  <!-- Contact tracing form -->
-                  <div class="row">
-                    {% if current_user.is_doctor %}
-                      <!-- If you're a doctor you get nothing-->
-                    {% else %}
-                      <!-- Patient get's a form to fill their contacts-->
-                      <div class="col-md-6 col-md-offset-3">
-                        <form action="{% url 'profile' %}" method='post' enctype="multipart/form-data">
-                          {% csrf_token %}
-                        
-                          {% bootstrap_form form %}
-                            <input type="submit" class="btn btn-sucess" value="Post">
-                        </form>                    
-                      </div>
-
-                    {% endif %}
-                  </div>
-                </div>
-              </div>            
+                <input type="text" class="form-control details" placeholder="{{patient_report.treatment}}" aria-label="Username" aria-describedby="basic-addon1" style="background: transparent;" readonly>
+              </div>
+              <style>
+                .details {                  
+                  border-top:transparent;
+                  border-right:transparent;                                  
+                }
+              </style>
+            </div>             
           </div>
-        <div class="col"><!-- Empty col to center the profile--></div>
-      </div>    
+
+          <div class="row" style="margin-top: 30px;">
+            <div class="col-md-8">
+              <!-- Doctors report section-->
+              <div class="container" style="background:white;">
+
+                <!-- The section heading and if condition to allow only doctors to access the input button -->
+                <div class="container" style="padding: 10px;">
+                    <h5 style="text-align: center;  color: #0a82f3de;font-weight: bold; display: inline-block; padding-right: 30%;">Doctor's report</h5>  
+                    {% if current_user.is_doctor %}
+                      <button class="btn btn-primary" style="display: inline-block;" data-toggle="modal" data-target="#reportform" >Add Report</button>                      
+                    {% else %}
+                    {% endif %}
+                </div>  
+              
+                <!-- Report table-->              
+                <table class="table table-hover">                                                    
+                      <tbody>                                                    
+                          <tr>                                
+                            <td colspan="3" style="font-weight: bold;">Temperature</td>                                
+                            {% if patient_report.temp %}
+                            <td> {{patient_report.temp}} °C</td>
+                            {% else %}
+                            <td>--°C</td>                            
+                            {% endif %}
+                          </tr>
+                          <tr>
+                            <td colspan="3" style="font-weight: bold;">Test No.</td>                                                                
+                            {% if patient_report.kit %}
+                            <td> {{patient_report.kit}}</td>
+                            {% else %}
+                            <td>----</td>                            
+                            {% endif %}
+                          </tr>         
+                          <tr>
+                            <td style="font-weight: bold;">Comment</td>                                
+                            {% if patient_report.comments %}
+                              <td colspan="4">
+                                {{patient_report.comments | safe}}
+                                <p style="font-size: 12px; color: grey; margin-left: 60%;">Dr. {{patient_report.doctor}}</p>
+                              </td>
+                            {% else %}
+                              <td colspan="4"> No comments yet.</td>
+                            {% endif %}
+                          </tr>                                               
+                      </tbody>                                                                        
+                </table>
+                                   
+              </div>
+            </div>
+              
+            <div class="col">
+                <!-- Patient live location cordinates on a map -->
+                
+                <div class="col" id="map">                    
+                  <!-- User location map -->
+                  
+                  <p>Your are in <strong>{{ city }}</strong>,<strong>{{ country }}</strong> based on your ip address.</p>
+                  <iframe 
+                        frameborder="0"
+                       style="border:0; width:200px; height:250px; object-fit: cover;"
+                       src="https://www.google.com/maps/embed/v1/view?center={{ latitude }},{{ longitude }}&zoom=8&key={{ api_key }}"
+                       allowfullscreen>
+                  </iframe>
+                </div>
+                
+            </div>
+                        
+            <!-- Edit Health Report Modal -->
+            <div class="modal fade" id="reportform" tabindex="-1" role="dialog" aria-labelledby="reportform" aria-hidden="true" >
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document" >
+                  <div class="modal-content" style="background:white;" >
+                    <div class="modal-header" style="background: #0a82f3de;">
+                      <h4 class="modal-title" style="color: white; padding-left:37%"><span style="font-weight: bold;">{{profile.user}}</span> Report</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div> 
+                    <div class="modal-body">
+                      <div class="container" style="text-align: center; width:80%;">
+                        <form action="{% url 'visitprofile' profile.user.id %}" method="post" enctype="multipart/form-data">
+                          {% csrf_token %}
+                      
+                          {% bootstrap_form reportform %}
+                          <input type="submit" class="btn btn-success btn-lg" value="Update report">
+                        </form> 
+                      </div>
+                    </div>    
+                  </div>
+                </div>
+            </div>
+          </div> 
+          
+          <div class="container" style="margin-top:5vh;">
+            <!-- Contact tracing section -->            
+            <h5 style="color: #0a82f3de; font-weight: bold;">Contacts</h5>
+            <hr>
+              <div class="row" style="background:white;">  
+                
+                <div class="col-md-6">
+                  <!-- Contact tracing table -->                  
+                  <table class="table" style="width:100%">
+                    <thead class="thead-dark">
+                      <tr>                            
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Location</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for cont in contacts %}
+                      <tr>                            
+                        <td>{{cont.name}}</td>
+                        <td>{{cont.email}}</td>
+                        <td>{{cont.phone}}</td>
+                        <td>{{cont.location}}</td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <div class="col">
+                   <!-- Contact tracing form -->              
+                  {% if current_user.is_doctor %}
+                    <!-- If you're a doctor you get nothing-->
+                  {% else %}                  
+                    <!-- Patient get's a form to fill their contacts-->                    
+                    <h6 style="text-align: center; color: #0a82f3de; font-weight: bold;">Add close contacts</h6>
+                    <form action="{% url 'profile' %}" method='post' enctype="multipart/form-data" style="width:80%; margin-left: 10%;">
+                      {% csrf_token %}
+                    
+                      {% bootstrap_form contactform %}
+                        <input type="submit" class="btn btn-success" style="width:100%;" value="Post">
+                    </form>                                                                
+                  {% endif %}                  
+                </div>
+              </div>              
+            
+          </div>            
+        </div>       
+      </div>      
   {% bootstrap_javascript %}
   {% endblock %}
 

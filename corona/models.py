@@ -7,6 +7,7 @@ from django.utils import timezone
 # Create your models here.
 class User(AbstractUser):
     is_doctor = models.BooleanField(default=False, blank=True)
+    is_staff = models.BooleanField(default=False, blank=True)
     
 #Patient treatment option
 class Treatment(models.Model):
@@ -61,9 +62,9 @@ class Patient(models.Model):
     name = models.CharField(max_length=100)
     phone = models.CharField(max_length=10) 
     location = models.CharField(max_length=10) 
+    nat_id = models.CharField(max_length=8) 
     prof_pic = models.ImageField(upload_to = 'patient/', blank=True, null=True) 
-    post_date = models.DateTimeField(default=timezone.now) 
-
+    post_date = models.DateTimeField(default=timezone.now)         
     def __str__(self):
         return self.name
 
@@ -86,9 +87,9 @@ class Report(models.Model):
     kit = models.CharField(max_length=100)
     status = models.ForeignKey(Status,on_delete=models.CASCADE, blank=True)    
     treatment = models.ForeignKey(Treatment,on_delete=models.CASCADE, blank=True)    
-    doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE, blank=True) 
+    doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE, blank=True)         
     post_date = models.DateTimeField(default=timezone.now)        
-
+        
     def __str__(self):
         return self.user
 
@@ -97,6 +98,7 @@ class Report(models.Model):
         reports = Report.objects.filter(user=id)
         report = reports.order_by("-post_date").first()
         return report
+
 
 class Contact(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)                
